@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parcial - Aplicaciones Híbridas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="h-full grid grid-rows-[200px_1fr_100px] gap-8">
+    <nav class="flex flex-col items-center justify-center bg-green-800 text-white gap-2">
+        <h1 class="text-3xl font-medium">Parcial #1 - API Rest</h1>
+        <p class="text-lg">Mariano Buranits, Eric Jacobsen, Sebastian Winter </p>
+    </nav>
+    <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mx-8">
+        <div id="user">
+            <h2 class="font-semibold text-3xl mb-2">Usuarios</h2>
+            <div class="flex flex-col gap-2 p-2 border">
+                <div class="border p-2 bg-blue-50">
+                    <div class="flex items-center gap-1">
+                        <div class="text-sm text-white font-semibold bg-blue-700 px-2 rounded-full w-fit">GET</div>
+                        <a class="font-medium me-3 text-blue-600" href="http://localhost:3000/api/users" target="_blank">/api/users</a>
+                    </div>
+                    <p>Obtiene todos los usuarios</p>
+                </div>
+                <div class="border p-2 bg-green-50">
+                    <div class="flex items-center gap-1">
+                        <div class="text-sm text-white font-semibold bg-green-700 px-2 rounded-full w-fit">POST</div>
+                        <p class="font-medium">/api/users</p>
+                    </div>
+                    <p>Crea un nuevo usuario</p>
+                </div>
+                <div class="border p-2 bg-green-50">
+                    <div class="flex items-center gap-1">
+                        <div class="text-sm text-white font-semibold bg-green-700 px-2 rounded-full w-fit">POST</div>
+                        <p class="font-medium">/api/users/login</p>
+                    </div>
+                    <p>Inicia sesión con un usuario</p>
+                </div>
+                <div class="border p-2 bg-blue-50">
+                    <div class="flex items-center gap-1">
+                        <div class="text-sm text-white font-semibold bg-blue-700 px-2 rounded-full w-fit">GET</div>
+                        <p class="font-medium">/api/users/:id</p>
+                    </div>
+                    <p>Obtiene un usuario por ID</p>
+                </div>
+                <div class="border p-2 bg-red-50">
+                    <div class="flex items-center gap-1">
+                        <div class="text-sm text-white font-semibold bg-red-700 px-2 rounded-full w-fit">DELETE</div>
+                        <p class="font-medium">/api/users/:id</p>
+                    </div>
+                    <p>Elimina un usuario por ID</p>
+                </div>
+                <div class="border p-2 bg-yellow-50">
+                    <div class="flex items-center gap-1">
+                        <div class="text-sm text-white font-semibold bg-yellow-700 px-2 rounded-full w-fit">PUT</div>
+                        <p class="font-medium">/api/users/:id</p>
+                    </div>
+                    <p>Actualiza un usuario por ID</p>
+                </div>
+            </div>
+        </div>
+        <div id="post">
+            <h2 class="font-semibold text-3xl mb-2">Posteos</h2>
+            <div class="flex flex-col gap-2 p-2 border">
+                <div class="border p-2 bg-blue-50">
+                    <div class="flex items-center gap-1">
+                        <div class="text-sm text-white font-semibold bg-blue-700 px-2 rounded-full w-fit">GET</div>
+                        <a class="font-medium me-3 text-blue-600" href="http://localhost:3000/api/posts" target="_blank">/api/posts</a>
+                    </div>
+                    <p>Obtiene todos los posteos</p>
+                </div>
+                <div class="border p-2 bg-blue-50">
+                    <div class="flex items-center gap-1">
+                        <div class="text-sm text-white font-semibold bg-blue-700 px-2 rounded-full w-fit">GET</div>
+                        <a class="font-medium me-3 text-blue-600" href="http://127.0.0.1:3000/api/posts?sort=top" target="_blank">/api/posts?sort=top</a>
+                    </div>
+                    <p>Obtiene todos los posteos ordenados de mayor a menor likes</p>
+                </div>
+                <div class="border p-2 bg-blue-50">
+                    <div class="flex items-center gap-1">
+                        <div class="text-sm text-white font-semibold bg-blue-700 px-2 rounded-full w-fit">GET</div>
+                        <a class="font-medium me-3 text-blue-600" href="http://127.0.0.1:3000/api/posts?sort=top" target="_blank">/api/posts?sort=views</a>
+                    </div>
+                    <p>Obtiene todos los posteos ordenados de mayor a menor vistas</p>
+                </div>
+                <div class="border p-2 bg-green-50">
+                    <div class="flex items-center gap-1">
+                        <div class="text-sm text-white font-semibold bg-green-700 px-2 rounded-full w-fit">POST</div>
+                        <p class="font-medium">/api/posts</p>
+                    </div>
+                    <p>Crea un nuevo posteo</p>
+                </div>
+                <div class="border p-2 bg-blue-50">
+                    <div class="flex items-center gap-1">
+                        <div class="text-sm text-white font-semibold bg-blue-700 px-2 rounded-full w-fit">GET</div>
+                        <p class="font-medium">/api/posts/user/:userId</p>
+                    </div>
+                    <p>Obtiene un posteo de un usuario por su ID</p>
+                </div>
+                <div class="border p-2 bg-blue-50">
+                    <div class="flex items-center gap-1">
+                        <div class="text-sm text-white font-semibold bg-blue-700 px-2 rounded-full w-fit">GET</div>
+                        <p class="font-medium">/api/posts/:id</p>
+                    </div>
+                    <p>Obtiene un posteo por ID</p>
+                </div>
+                <div class="border p-2 bg-blue-50">
+                    <div class="flex items-center gap-1">
+                        <div class="text-sm text-white font-semibold bg-blue-700 px-2 rounded-full w-fit">GET</div>
+                        <p class="font-medium">/api/posts/name/:title</p>
+                    </div>
+                    <p>Obtiene un posteo por su titulo</p>
+                </div>
+                <div class="border p-2 bg-red-50">
+                    <div class="flex items-center gap-1">
+                        <div class="text-sm text-white font-semibold bg-red-700 px-2 rounded-full w-fit">DELETE</div>
+                        <p class="font-medium">/api/posts/:id</p>
+                    </div>
+                    <p>Elimina un posteo por ID</p>
+                </div>
+                <div class="border p-2 bg-yellow-50">
+                    <div class="flex items-center gap-1">
+                        <div class="text-sm text-white font-semibold bg-yellow-700 px-2 rounded-full w-fit">PUT</div>
+                        <p class="font-medium">/api/posts/:id</p>
+                    </div>
+                    <p>Actualiza un posteo por ID</p>
+                </div>
+            </div>
+        </div>
+        <div id="comment">
+            <h2 class="font-semibold text-3xl mb-2">Comentarios</h2>
+            <div class="flex flex-col gap-2 p-2 border">
+                <div class="border p-2 bg-blue-50">
+                    <div class="flex items-center gap-1">
+                        <div class="text-sm text-white font-semibold bg-blue-700 px-2 rounded-full w-fit">GET</div>
+                        <a class="font-medium me-3 text-blue-600" href="http://localhost:3000/api/comments" target="_blank">/api/comments</a>
+                    </div>
+                    <p>Obtiene todos los comentarios</p>
+                </div>
+                <div class="border p-2 bg-green-50">
+                    <div class="flex items-center gap-1">
+                        <div class="text-sm text-white font-semibold bg-green-700 px-2 rounded-full w-fit">POST</div>
+                        <p class="font-medium">/api/comments</p>
+                    </div>
+                    <p>Crea un nuevo comentario</p>
+                </div>
+                <div class="border p-2 bg-blue-50">
+                    <div class="flex items-center gap-1">
+                        <div class="text-sm text-white font-semibold bg-blue-700 px-2 rounded-full w-fit">GET</div>
+                        <p class="font-medium">/api/comments/user/:userId</p>
+                    </div>
+                    <p>Obtiene todos los comentarios de un usuario</p>
+                </div>
+                <div class="border p-2 bg-blue-50">
+                    <div class="flex items-center gap-1">
+                        <div class="text-sm text-white font-semibold bg-blue-700 px-2 rounded-full w-fit">GET</div>
+                        <p class="font-medium">/api/comments/:id</p>
+                    </div>
+                    <p>Obtiene todos los comentarios de un post</p>
+                </div>
+                <div class="border p-2 bg-red-50">
+                    <div class="flex items-center gap-1">
+                        <div class="text-sm text-white font-semibold bg-red-700 px-2 rounded-full w-fit">DELETE</div>
+                        <p class="font-medium">/api/comments/:id</p>
+                    </div>
+                    <p>Elimina un comentario por ID</p>
+                </div>
+                <div class="border p-2 bg-yellow-50">
+                    <div class="flex items-center gap-1">
+                        <div class="text-sm text-white font-semibold bg-yellow-700 px-2 rounded-full w-fit">PUT</div>
+                        <p class="font-medium">/api/comments/:id</p>
+                    </div>
+                    <p>Actualiza un comentario por ID</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer class="bg-neutral-100 grid items-center justify-center">
+        <div class="w-fit grid grid-cols-3 items-center gap-8">
+            <div class="w-fit">
+                <h3 class="font-bold">Materia</h3>
+                <p>Aplicaciones Híbridas</p>
+            </div>
+            <div class="w-fit">
+                <h3 class="font-bold">Profesor</h3>
+                <p>Jonathan Cruz</p>
+            </div>
+            <div class="w-fit">
+                <h3 class="font-bold">Comisión</h3>
+                <p>DWM4AP</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
