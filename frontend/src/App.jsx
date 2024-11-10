@@ -1,35 +1,61 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import Header from './components/Header';
+import Footer from './components/Footer';
+import Column from './components/Column';
+import Card from './components/Card';
 
 function App() {
-  const [count, setCount] = useState(0)
+    const data = {
+        users: [
+            { method: "GET", endpoint: "/api/users", description: "Obtiene todos los usuarios" },
+            { method: "POST", endpoint: "/api/users/login", description: "Inicia sesión con un usuario" },
+            { method: "GET", endpoint: "/api/users/:id", description: "Obtiene un usuario por ID" },
+            { method: "DELETE", endpoint: "/api/users/:id", description: "Elimina un usuario por ID" },
+            { method: "PUT", endpoint: "/api/users/:id", description: "Actualiza un usuario por ID" },
+        ],
+        posts: [
+            { method: "GET", endpoint: "/api/posts", description: "Obtiene todos los posteos" },
+            { method: "GET", endpoint: "/api/posts?sort=top", description: "Obtiene todos los posteos ordenados de mayor a menor likes" },
+            { method: "GET", endpoint: "/api/posts?sort=views", description: "Obtiene todos los posteos ordenados de mayor a menor vistas" },
+            { method: "GET", endpoint: "/api/posts/user/:userId", description: "Obtiene un posteo de un usuario por su ID" },
+            { method: "GET", endpoint: "/api/posts/:id", description: "Obtiene un posteo por ID" },
+            { method: "GET", endpoint: "/api/posts/name/:title", description: "Obtiene un posteo por su titulo" },
+            { method: "POST", endpoint: "/api/posts", description: "Crea un nuevo posteo" },
+            { method: "DELETE", endpoint: "/api/posts/:id", description: "Elimina un posteo por ID" },
+            { method: "PUT", endpoint: "/api/posts/:id", description: "Actualiza un posteo por ID" },
+        ],
+        comments: [
+            { method: "GET", endpoint: "/api/comments", description: "Obtiene todos los comentarios" },
+            { method: "POST", endpoint: "/api/comments", description: "Crea un nuevo comentario" },
+            { method: "GET", endpoint: "/api/comments/user/:userId", description: "Obtiene todos los comentarios de un usuario" },
+            { method: "GET", endpoint: "/api/comments/:id", description: "Obtiene todos los comentarios de un post" },
+            { method: "DELETE", endpoint: "/api/comments/:id", description: "Elimina un comentario por ID" },
+            { method: "PUT", endpoint: "/api/comments/:id", description: "Actualiza un comentario por ID" },
+        ],
+    };
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    return (
+        <>
+            <Header />
+            <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mx-8">
+                <Column id="user" label="Usuarios">
+                    {data.users.map((user, index) => (
+                        <Card key={index} method={user.method} endpoint={user.endpoint} description={user.description} />
+                    ))}
+                </Column>
+                <Column id="post" label="Posteos">
+                    {data.posts.map((post, index) => (
+                        <Card key={index} method={post.method} endpoint={post.endpoint} description={post.description} />
+                    ))}
+                </Column>
+                <Column id="comment" label="Comentarios">
+                    {data.comments.map((comment, index) => (
+                        <Card key={index} method={comment.method} endpoint={comment.endpoint} description={comment.description} />
+                    ))}
+                </Column>
+            </section>
+            <Footer />
+        </>
+    )
 }
 
 export default App
