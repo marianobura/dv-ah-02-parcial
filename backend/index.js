@@ -3,12 +3,15 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 const User = require('./models/usersModels');
 const routerAPI = require('./routes');
+const cors = require('cors');
+require('dotenv').config();
+
 
 // accedemos a la variable de Entorno
 const port = process.env.PORT;
 
 // Conectamos a la db
-mongoose.connect('mongodb://127.0.0.1:27017/app');
+mongoose.connect(process.env.URI_BD, { useNewUrlParser: true, useUnifiedTopology: true })
 const db = mongoose.connection;
 
 db.on('error', () => console.error('Error'));
@@ -18,6 +21,7 @@ db.once('open', () => {
 
 const app = express();
 // Ruta Raíz
+app.use(cors());
 app.use(express.json());
 
 //Definimos la carpeta para servir archivos estaticos
