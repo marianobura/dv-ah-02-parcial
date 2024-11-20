@@ -4,7 +4,6 @@ const Login = () => {
     //Creamos un estado para el formulario
     const [ formData, setFormData ] = useState({
         username: '',
-        email: '',
         password: ''
     });
 
@@ -20,7 +19,7 @@ const Login = () => {
         try {
             console.log('Enviando formulario');    
             console.log(formData);
-            const endPoint = 'http://127.0.0.1:3000/api/users';
+            const endPoint = 'http://127.0.0.1:3000/api/users/login';
             const config = {
                 headers: {
                     'Content-Type': 'application/json'
@@ -40,7 +39,6 @@ const Login = () => {
             console.log(data);
             setFormData({
                 username: '',  
-                email: '',
                 password: ''
             });
 
