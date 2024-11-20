@@ -3,7 +3,7 @@ import { useState } from 'react';
 const Registro = () => {
     //Creamos un estado para el formulario
     const [ formData, setFormData ] = useState({
-        nombre: '',
+        username: '',
         email: '',
         password: ''
     });
@@ -20,7 +20,7 @@ const Registro = () => {
         try {
             console.log('Enviando formulario');    
             console.log(formData);
-            const endPoint = 'http://localhost:3000/api/users';
+            const endPoint = 'http://127.0.0.1:3000/api/users';
             const config = {
                 headers: {
                     'Content-Type': 'application/json'
@@ -39,7 +39,7 @@ const Registro = () => {
 
             console.log(data);
             setFormData({
-                name: '',  
+                username: '',  
                 email: '',
                 password: ''
             });
@@ -61,8 +61,8 @@ const Registro = () => {
                     </h1>
                     <form className="space-y-4 md:space-y-6" onSubmit={ handleSubmit }>
                         <div>
-                            <label htmlFor="nombre" className="block mb-2 text-sm font-medium text-gray-900">Nombre</label>
-                            <input type="nombre" name="nombre" id="nombre" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Juan Pedro" required="" onChange={handleChange} value={formData.nombre} />
+                            <label htmlFor="username" className="block mb-2 text-sm font-medium text-gray-900">Nombre</label>
+                            <input type="username" name="username" id="username" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Juan Pedro" required="" onChange={handleChange} value={formData.username} />
                         </div>
                         <div>
                             <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">Your email</label>
