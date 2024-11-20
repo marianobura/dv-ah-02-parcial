@@ -97,8 +97,10 @@ const updateUserById = async (req, res) => {
     const { id } = req.params;
     const { username, password } = req.body;
 
+    const passwordHash = await bcrypt.hash(password, salt);
+
     try {
-        const user = await User.findByIdAndUpdate(id, { username, password }, { new: true });
+        const user = await User.findByIdAndUpdate(id, { username, password: passwordHash }, { new: true });
         if (user) {
             res.status(200).json({ msg: "success", data: user });
         } else {
