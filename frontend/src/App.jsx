@@ -2,6 +2,9 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import Column from './components/Column';
 import Card from './components/Card';
+import Registro from './Registro';
+
+import { Routes, Route, NavLink } from 'react-router-dom';
 
 function App() {
     const data = {
@@ -36,26 +39,39 @@ function App() {
     return (
         <>
             <Header />
-            <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mx-8">
-                <Column id="user" label="Usuarios">
-                    {data.users.map((user, index) => (
-                        <Card key={index} method={user.method} endpoint={user.endpoint} description={user.description} />
-                    ))}
-                </Column>
-                <Column id="post" label="Posteos">
-                    {data.posts.map((post, index) => (
-                        <Card key={index} method={post.method} endpoint={post.endpoint} description={post.description} />
-                    ))}
-                </Column>
-                <Column id="comment" label="Comentarios">
-                    {data.comments.map((comment, index) => (
-                        <Card key={index} method={comment.method} endpoint={comment.endpoint} description={comment.description} />
-                    ))}
-                </Column>
-            </section>
+            <Routes>
+                <Route path="/registro" element={<Registro />} />
+                <Route path="/" element={<DataDisplay data={data} />} />
+                <Route path="*" element={<p>Página no encontrada</p>} />
+            </Routes>
             <Footer />
         </>
-    )
+    );
 }
 
-export default App
+function DataDisplay({ data }) {
+    return (
+        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mx-8">
+            <Column id="user" label="Usuarios">
+                <h2 className="sr-only">Usuarios</h2>
+                {data.users.map((user, index) => (
+                    <Card key={index} method={user.method} endpoint={user.endpoint} description={user.description} />
+                ))}
+            </Column>
+            <Column id="post" label="Posteos">
+                <h2 className="sr-only">Posteos</h2>
+                {data.posts.map((post, index) => (
+                    <Card key={index} method={post.method} endpoint={post.endpoint} description={post.description} />
+                ))}
+            </Column>
+            <Column id="comment" label="Comentarios">
+                <h2 className="sr-only">Comentarios</h2>
+                {data.comments.map((comment, index) => (
+                    <Card key={index} method={comment.method} endpoint={comment.endpoint} description={comment.description} />
+                ))}
+            </Column>
+        </section>
+    );
+}
+
+export default App;
