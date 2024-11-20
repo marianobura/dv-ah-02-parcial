@@ -2,7 +2,8 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import Column from './components/Column';
 import Card from './components/Card';
-import Registro from './Registro';
+import Registro from './views/Registro';
+import Login from './views/Login';
 
 import { Routes, Route, NavLink } from 'react-router-dom';
 
@@ -41,6 +42,7 @@ function App() {
             <Header />
             <Routes>
                 <Route path="/registro" element={<Registro />} />
+                <Route path="/login" element={<Login />} />
                 <Route path="/" element={<DataDisplay data={data} />} />
                 <Route path="*" element={<p>Página no encontrada</p>} />
             </Routes>
