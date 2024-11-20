@@ -26,7 +26,7 @@ const Registro = () => {
                     'Content-Type': 'application/json'
                 },
                 method: 'POST',
-                body: JSON.stringfy(formData)
+                body: JSON.stringify(formData)
             }
         
             const response = await fetch(endPoint, config);
@@ -52,21 +52,35 @@ const Registro = () => {
     }
 
     return (
-        <div >
-            <h2>Registro</h2>
-            <form onSubmit={ handleSubmit } className="flex flex-col gap-2 p-2 border rounded-md">
-                <label htmlFor="">Nombre</label>
-                <input className="border border-black" type="text" name='nombre' onChange={handleChange} value={formData.nombre}/>
-                
-                <label htmlFor="">Email</label>
-                <input className="border border-black" type="email" name='email' onChange={handleChange} value={formData.email}/>
-
-                <label htmlFor="">Contraseña</label>
-                <input className="border border-black" type="password" name='password' onChange={handleChange} value={formData.password}/>
-
-                <button type="submit" className='border border-black'>Registrarme</button>
-            </form>
+        <section className="bg-gray-50">
+        <div className="flex flex-col items-center justify-center px-6 py-8 lg:py-0">
+            <div className="w-full bg-white rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0">
+                <div className="p-6 space-y-4 md:space-y-6 sm:p-8 bg-neutral-300">
+                    <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
+                        Create an account
+                    </h1>
+                    <form className="space-y-4 md:space-y-6" onSubmit={ handleSubmit }>
+                        <div>
+                            <label htmlFor="nombre" className="block mb-2 text-sm font-medium text-gray-900">Nombre</label>
+                            <input type="nombre" name="nombre" id="nombre" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="name@company.com" required="" onChange={handleChange} value={formData.nombre} />
+                        </div>
+                        <div>
+                            <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">Your email</label>
+                            <input type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="name@company.com" required="" onChange={handleChange} value={formData.email} />
+                        </div>
+                        <div>
+                            <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900">Password</label>
+                            <input type="password" name="password" id="password" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" required="" onChange={handleChange} value={formData.password} />
+                        </div>
+                        <button type="submit" className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Create an account</button>
+                        <p className="text-sm font-light text-gray-500">
+                            Already have an account? <a href="#" className="font-medium text-primary-600 hover:underline">Login here</a>
+                        </p>
+                    </form>
+                </div>
+            </div>
         </div>
+        </section>
     );
 }
 
