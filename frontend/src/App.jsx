@@ -5,9 +5,69 @@ import Card from './components/Card';
 import Registro from './views/Registro';
 import Login from './views/Login';
 
-import { Routes, Route, NavLink } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 
 function App() {
+    let [recargar, setRecargar] = useState(false);
+    let [logeado, setLogeado] = useState(false);
+    let [users, setUsers] = useState([]);
+    let [posts, setPosts] = useState([]);
+    let [comments, setComments] = useState([]);
+    const [categorias, setCategorias] = useState([]);
+
+    useEffect(() => {
+        console.log('Se renderizó el componente');
+        const getCategories = async () => {
+            const resp = await fetch('http://localhost:3000/api/productos');
+            const data = await resp.json();
+            console.log(data);
+            setCategorias(data);
+        };
+
+        const GetUsers = async () => {
+            try {
+                const resp = await fetch('http://localhost:3000/api/users');
+                const data = await resp.json();
+
+                if (!data.data) {
+                    throw new Error("La propiedad 'data' no está definida en la respuesta de la API");
+                }
+
+                // Ahora actualizamos el estado con los usuarios obtenidos
+                setUsers(data.data.map(user => ({
+                    id: user._id,
+                    username: user.username,
+                    password: user.password,
+                })));
+            } catch (error) {
+                console.error('Error al obtener usuarios:', error);
+            }
+        };
+
+        if (logeado) {
+            GetUsers(); // Obtener usuarios solo si está logueado
+            getCategories();
+        }
+    }, [recargar, logeado]);
+
+    const iniciarRecarga = () => {
+        setRecargar(!recargar);
+    };
+
+    const login = () => {
+        console.log('Iniciar sesión');
+        setLogeado(true);
+    };
+
+    const logout = () => {
+        console.log('Cerrar sesión');
+        setLogeado(false);
+        setUsers([]);
+    };
+
+    let mensaje = logeado ? 'Cerrar sesión' : 'Iniciar sesión';
+
     const data = {
         users: [
             { method: "GET", endpoint: "/api/users", description: "Obtiene todos los usuarios" },
@@ -22,7 +82,7 @@ function App() {
             { method: "GET", endpoint: "/api/posts?sort=views", description: "Obtiene todos los posteos ordenados de mayor a menor vistas" },
             { method: "GET", endpoint: "/api/posts/user/:userId", description: "Obtiene un posteo de un usuario por su ID" },
             { method: "GET", endpoint: "/api/posts/:id", description: "Obtiene un posteo por ID" },
-            { method: "GET", endpoint: "/api/posts/name/:title", description: "Obtiene un posteo por su titulo" },
+            { method: "GET", endpoint: "/api/posts/name/:title", description: "Obtiene un posteo por su título" },
             { method: "POST", endpoint: "/api/posts", description: "Crea un nuevo posteo" },
             { method: "DELETE", endpoint: "/api/posts/:id", description: "Elimina un posteo por ID" },
             { method: "PUT", endpoint: "/api/posts/:id", description: "Actualiza un posteo por ID" },
@@ -40,12 +100,38 @@ function App() {
     return (
         <>
             <Header />
+            <h3>{mensaje}</h3>
+            <button onClick={iniciarRecarga}>Recargar</button>
+            <button onClick={login}>Login</button>
+            <button onClick={logout}>Logout</button>
+
             <Routes>
                 <Route path="/registro" element={<Registro />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/" element={<DataDisplay data={data} />} />
                 <Route path="*" element={<p>Página no encontrada</p>} />
             </Routes>
+
+            <select>
+                <option value="">Usuarios</option>
+                <option value="">Posts</option>
+                <option value="">Comments</option>
+            </select>
+
+            {logeado && (
+                <section>
+                    <h2>Usuarios</h2>
+                    {users.map(user => (
+                        <Column
+                        key={user.id}
+                        id={user.id}
+                        label={`Usuario: ${user.username}`}
+                        password={`Contraseña: ${user.password}`}
+                    />                    
+                    ))}
+                </section>
+            )}
+
             <Footer />
         </>
     );
