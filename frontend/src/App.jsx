@@ -178,29 +178,29 @@ function App() {
                         ))}
                     </div>
 
-                    <h2 className="text-xl font-bold mt-8 mb-2">Posteos</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {posts.map(post => (
-                            <Card
-                                key={post.id}
-                                method={`Post: ${post.title}`}
-                                endpoint={`Tags: ${post.tags.join(', ')}`}
-                                description={`Likes: ${post.likes}, Dislikes: ${post.dislikes}, Vistas: ${post.views}`}
-                            />
-                        ))}
-                    </div>
+                <h2 className="text-xl font-bold mt-8 mb-2">Posteos</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {posts.map(post => (
+                        <Card
+                            key={post.id}
+                            method={`Post: ${post.title}`}
+                            endpoint={`Tags: ${post.tags.join(', ')}`}
+                            description={`Likes: ${post.likes}, Dislikes: ${post.dislikes}, Vistas: ${post.views}`}
+                        />
+                    ))}
+                </div>
 
-                    <h2 className="text-xl font-bold mt-8 mb-2">Comentarios</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {comments.map(comment => (
-                            <Card
-                                key={comment.id}
-                                method="Comentario"
-                                endpoint={`Usuario ID: ${comment.userId} | Post ID: ${comment.postId}`}
-                                description={`Comentario: ${comment.body} | Likes: ${comment.likes}`}
-                            />
-                        ))}
-                    </div>
+                <h2 className="text-xl font-bold mt-8 mb-2">Comentarios</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {comments.map(comment => (
+                        <Card
+                            key={comment.id}
+                            method="Comentario"
+                            endpoint={`Usuario ID: ${comment.userId} | Post ID: ${comment.postId}`}
+                            description={`Comentario: ${comment.body} | Likes: ${comment.likes}`}
+                        />
+                    ))}
+                </div>
     </section>
 )}
 
