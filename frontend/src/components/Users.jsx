@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 function Users() {
     let [users, setUsers] = useState([]);
-    let [formData, setFormData] = useState({ username: '', password: '' });
+    let [formData, setFormData] = useState({ id: '', username: '', password: '' });
     let [method, setMethod] = useState("POST");
 
     const getUsers = async () => {
@@ -26,8 +26,48 @@ function Users() {
         getUsers();
     }, []);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+
+        const url = method === "DELETE" || method === "PUT" 
+            ? `http://localhost:3000/api/users/${formData.id}`
+            : `http://localhost:3000/api/users`;
+
+        try {
+            let response;
+            if (method === "DELETE") {
+                response = await fetch(url, {
+                    method: "DELETE",
+                });
+            } else if (method === "PUT") {
+                response = await fetch(url, {
+                    method: "PUT",
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: formData.username,
+                        password: formData.password,
+                    }),
+                });
+            } else if (method === "POST") {
+                response = await fetch(url, {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData),
+                });
+            }
+
+            if (response.ok) {
+                await getUsers();
+            } else {
+                throw new Error("Error al enviar el formulario");
+            }
+        } catch (error) {
+            console.error("Error al enviar el formulario:", error);
+        }
     };
 
     return (
@@ -57,7 +97,7 @@ function Users() {
                 <input 
                     type="text" 
                     name="username" 
-                    placeholder="Nombre" 
+                    placeholder="Nombre de Usuario" 
                     value={formData.username}
                     onChange={(e) => setFormData({...formData, username: e.target.value})}
                 />
@@ -69,7 +109,7 @@ function Users() {
                     onChange={(e) => setFormData({...formData, password: e.target.value})}
                 />
 
-                <select onChange={(e) => setMethod(e.target.value)}>
+                <select onChange={(e) => setMethod(e.target.value)} value={method}>
                     <option value="POST">POST</option>
                     <option value="PUT">PUT</option>
                     <option value="DELETE">DELETE</option>

@@ -16,7 +16,6 @@ function App() {
                 <Route path="/crud" element={<Crud />} />
                 <Route path="/" element={<Home />} />
                 <Route path="*" element={<p>Página no encontrada</p>} />
-                {/* <Route path="/detalle/" element={<Details/>} /> */}
             </Routes>
             <Footer />
         </>

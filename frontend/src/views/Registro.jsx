@@ -1,7 +1,6 @@
 import { useState } from 'react';
 
 const Registro = () => {
-    //Creamos un estado para el formulario
     const [ formData, setFormData ] = useState({
         username: '',
         email: '',
@@ -10,11 +9,9 @@ const Registro = () => {
 
     const handleChange = (event) => {
         const { name, value } = event.target;
-        // console.log(name, value);
         setFormData( { ...formData, [name]: value } )
     }
 
-    //Evitamos la recarga de la página
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {

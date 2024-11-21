@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 function Comments() {
     let [comments, setComments] = useState([]);
-    let [formData, setFormData] = useState({ body: '', likes: '', userId: '', postId: '' });
+    let [formData, setFormData] = useState({ id: '', body: '', likes: '', userId: '', postId: '' });
     let [method, setMethod] = useState("POST");
 
     const getComments = async () => {
@@ -27,12 +27,54 @@ function Comments() {
 
     useEffect(() => {
         getComments();
-    }, []); // Solo se ejecuta una vez al montar el componente
+    }, []);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Lógica para enviar el formulario dependiendo del método seleccionado (POST, PUT, DELETE)
+        
+        const url = method === "DELETE" || method === "PUT" 
+            ? `http://localhost:3000/api/comments/${formData.id}`
+            : `http://localhost:3000/api/comments`;
+    
+        try {
+            let response;
+            if (method === "DELETE") {
+                response = await fetch(url, {
+                    method: "DELETE",
+                });
+            } else if (method === "PUT") {
+                response = await fetch(url, {
+                    method: "PUT",
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        body: formData.body,
+                        likes: formData.likes,
+                        postId: formData.postId,
+                    }),
+                });
+            } else if (method === "POST") {
+                response = await fetch(url, {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData),
+                });
+            }
+    
+            if (response.ok) {
+                await getComments();
+            } else {
+                throw new Error("Error al enviar el formulario");
+            }
+        } catch (error) {
+            console.error("Error al enviar el formulario:", error);
+        }
     };
+    
+    
 
     return (
         <>
@@ -88,7 +130,7 @@ function Comments() {
                     onChange={(e) => setFormData({...formData, postId: e.target.value})}
                 />
 
-                <select onChange={(e) => setMethod(e.target.value)}>
+                <select onChange={(e) => setMethod(e.target.value)} value={method}>
                     <option value="POST">POST</option>
                     <option value="PUT">PUT</option>
                     <option value="DELETE">DELETE</option>

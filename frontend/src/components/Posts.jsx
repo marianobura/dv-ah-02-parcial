@@ -2,39 +2,100 @@ import { useState, useEffect } from "react";
 import Card from '../components/Card';
 
 function Posts() {
-    let [posts, setPosts] = useState([]);
-    let [formData, setFormData] = useState({ title: '', body: '', tags: '', likes: '', dislikes: '', views: '', userId: '' });
-    let [method, setMethod] = useState("POST");
+    const [posts, setPosts] = useState([]);
+    const [formData, setFormData] = useState({ title: '', body: '', tags: '', likes: '', dislikes: '', views: '', userId: '', id: '' });
+    const [method, setMethod] = useState("POST");
 
     useEffect(() => {
-        const getPosts = async () => {
-            try {
-                const resp = await fetch('http://localhost:3000/api/posts');
-                const data = await resp.json();
-                if (!data.data) {
-                    throw new Error("La propiedad 'data' no está definida en la respuesta de la API");
-                }
+        getPosts(); 
+    }, []);
+    
+    const getPosts = async () => {
+        try {
+            const resp = await fetch('http://localhost:3000/api/posts');
+            const data = await resp.json();
+            if (Array.isArray(data.data)) {
+                console.log(data.data); 
                 setPosts(data.data.map(post => ({
                     id: post._id,
                     title: post.title,
                     body: post.body,
-                    tags: post.tags, 
+                    tags: post.tags || [],
                     likes: post.reactions.likes,
                     dislikes: post.reactions.dislikes,
                     views: post.views,
                     userId: post.userId
                 })));
-            } catch (error) {
-                console.error('Error al obtener posts:', error);
+            } else {
+                console.error("La respuesta no contiene un arreglo de posts.");
             }
-        };
+        } catch (error) {
+            console.error('Error al obtener posts:', error);
+        }
+    };
+    
 
-        getPosts();
-    }, []); // Solo se ejecuta una vez al montar el componente
+    useEffect(() => {
+        getPosts(); 
+    }, []);
 
-    const handleSubmit = (e) => {
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Lógica para enviar el formulario dependiendo del método seleccionado (POST, PUT, DELETE)
+
+        const url = 'http://localhost:3000/api/posts';
+        let response;
+        const tagsArray = formData.tags ? formData.tags.split(',').map(tag => tag.trim()) : [];
+
+        try {
+            if (method === 'POST') {
+                response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        title: formData.title,
+                        body: formData.body,
+                        tags: tagsArray,
+                        reactions: { likes: formData.likes, dislikes: formData.dislikes },
+                        views: formData.views,
+                        userId: formData.userId,
+                    }),
+                });
+            } else if (method === 'PUT') {
+                response = await fetch(`${url}/${formData.id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        title: formData.title,
+                        body: formData.body,
+                        tags: tagsArray,
+                        reactions: { likes: formData.likes, dislikes: formData.dislikes },
+                        views: formData.views,
+                        userId: formData.userId,
+                    }),
+                });
+            } else if (method === 'DELETE') {
+                response = await fetch(`${url}/${formData.id}`, { method: 'DELETE' });
+            }
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Respuesta del servidor:', data);
+                if (method === 'POST') {
+                    setPosts(prevPosts => [...prevPosts, data.data]);
+                } else if (method === 'PUT') {
+                    setPosts(prevPosts => prevPosts.map(post => post.id === formData.id ? data.data : post));
+                } else if (method === 'DELETE') {
+                    setPosts(prevPosts => prevPosts.filter(post => post.id !== formData.id));
+                }
+                getPosts();
+            } else {
+                const errorDetails = await response.text();
+                console.error('Error al procesar la solicitud:', errorDetails);
+            }
+        } catch (error) {
+            console.error('Error al procesar la solicitud:', error);
+        }
     };
 
     return (
@@ -79,7 +140,7 @@ function Posts() {
                     name="tags" 
                     placeholder="Etiquetas" 
                     value={formData.tags}
-                    onChange={(e) => setFormData({...formData, tags: e.target.value.split(',')})}
+                    onChange={(e) => setFormData({...formData, tags: e.target.value})}
                 />
                 <input 
                     type="number" 
