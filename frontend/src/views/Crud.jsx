@@ -1,119 +1,53 @@
 import { useState } from "react";
-import Card from '../components/Card'
+import Users from '../components/Users'
+import Posts from '../components/Posts'
+import Comments from "../components/Comments";
 
 function Crud() {
-    let [users, setUsers] = useState([]);
-    let [posts, setPosts] = useState([]);
-    let [comments, setComments] = useState([]);
+    const [selection, setSelection] = useState("users");
 
-    const getUsers = async () => {
-        try {
-            const resp = await fetch('http://localhost:3000/api/users');
-            const data = await resp.json();
-
-            if (!data.data) {
-                throw new Error("La propiedad 'data' no está definida en la respuesta de la API");
-            }
-
-            setUsers(data.data.map(user => ({
-                id: user._id,
-                username: user.username,
-                password: user.password,
-            })));
-        } catch (error) {
-            console.error('Error al obtener usuarios:', error);
-        }
+    const handleSelectionChange = (e) => {
+        setSelection(e.target.value);
     };
 
-    const getPosts = async () => {
-        try {
-            const resp = await fetch('http://localhost:3000/api/posts');
-            const data = await resp.json();
-    
-            if (!data.data) {
-                throw new Error("La propiedad 'data' no está definida en la respuesta de la API");
-            }
-    
-            setPosts(data.data.map(post => ({
-                id: post._id,
-                title: post.title,
-                body: post.body,
-                tags: post.tags, 
-                likes: post.reactions.likes,
-                dislikes: post.reactions.dislikes,
-                views: post.views,
-                userId: post.userId
-            })));
-        } catch (error) {
-            console.error('Error al obtener posts:', error);
+    const renderContent = () => {
+        switch (selection) {
+            case "users":
+                return (
+                    <Users />
+                );
+            case "posts":
+                return (
+                    <Posts />
+                )
+            case "comments":
+                return (
+                    <Comments />
+                );
+            default:
+                return null;
         }
     };
-    
-    const getComments = async () => {
-        try {
-            const resp = await fetch('http://localhost:3000/api/comments');
-            const data = await resp.json();
-    
-            if (!data.data) {
-                throw new Error("La propiedad 'data' no está definida en la respuesta de la API");
-            }
-    
-            setComments(data.data.map(comment => ({
-                id: comment._id,
-                body: comment.body,
-                likes: comment.likes,
-                userId: comment.userId,
-                postId: comment.postId
-            })));
-        } catch (error) {
-            console.error('Error al obtener comentarios:', error);
-        }
-    };
-
-    getUsers(),
-    getPosts(),
-    getComments()
 
     return (
         <>
             <section className="container mx-auto px-4">
-                <h2 className="text-xl font-bold mt-4 mb-2">Usuarios</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {users.map(user => (
-                            <Card
-                                key={user.id}
-                                method="Usuario"
-                                endpoint={`ID: ${user.id}`}
-                                description={`Username: ${user.username} | Contraseña: ${user.password}`}
-                            />
-                        ))}
+                <div className="w-full max-w-sm min-w-[200px] mt-4">
+                    <div className="relative">
+                        <select value={selection} onChange={handleSelectionChange} className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded pl-3 pr-8 py-3 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md appearance-none cursor-pointer">
+                            <option value="users">Usuarios</option>
+                            <option value="posts">Posteos</option>
+                            <option value="comments">Comentarios</option>
+                        </select>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.2" stroke="currentColor" className="h-5 w-5 ml-1 absolute top-3.5 right-2.5 text-slate-700">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
+                        </svg>
                     </div>
-                <h2 className="text-xl font-bold mt-8 mb-2">Posteos</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {posts.map(post => (
-                        <Card
-                            key={post.id}
-                            method={`Post: ${post.title}`}
-                            endpoint={`Tags: ${post.tags.join(', ')}`}
-                            description={`Likes: ${post.likes}, Dislikes: ${post.dislikes}, Vistas: ${post.views}`}
-                        />
-                    ))}
                 </div>
-
-                <h2 className="text-xl font-bold mt-8 mb-2">Comentarios</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {comments.map(comment => (
-                        <Card
-                            key={comment.id}
-                            method="Comentario"
-                            endpoint={`Usuario ID: ${comment.userId} | Post ID: ${comment.postId}`}
-                            description={`Comentario: ${comment.body} | Likes: ${comment.likes}`}
-                        />
-                    ))}
-                </div>
+                {renderContent()}
             </section>
         </>
-    )
+    );
 }
 
 export default Crud;
