@@ -1,4 +1,3 @@
-// Card.jsx
 function Card({ method, endpoint, description }) {
     const colors = {
         GET: {
@@ -19,17 +18,20 @@ function Card({ method, endpoint, description }) {
         },
     };
 
-    const color = colors[method];
+    const color = colors[method] || {
+        bg: "bg-gray-50",
+        labelBg: "bg-gray-700",
+    };
 
     return (
         <div className={`border p-2 ${color.bg}`}>
             <div className="flex items-center gap-1">
                 <div className={`text-sm text-white font-semibold px-2 rounded-full w-fit ${color.labelBg}`}>
-                    {method}
+                    {method || "UNKNOWN"}
                 </div>
-                <p className="font-medium">{endpoint}</p>
+                <p className="font-medium">{endpoint || "No endpoint provided"}</p>
             </div>
-            <p>{description}</p>
+            <p>{description || "No description available"}</p>
         </div>
     );
 }

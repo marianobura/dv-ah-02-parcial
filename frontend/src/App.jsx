@@ -14,16 +14,16 @@ function App() {
     let [users, setUsers] = useState([]);
     let [posts, setPosts] = useState([]);
     let [comments, setComments] = useState([]);
-    const [categorias, setCategorias] = useState([]);
+    // const [categorias, setCategorias] = useState([]);
 
     useEffect(() => {
         console.log('Se renderizó el componente');
-        const getCategories = async () => {
-            const resp = await fetch('http://localhost:3000/api/productos');
-            const data = await resp.json();
-            console.log(data);
-            setCategorias(data);
-        };
+        // const getCategories = async () => {
+        //     const resp = await fetch('http://localhost:3000/api/productos');
+        //     const data = await resp.json();
+        //     console.log(data);
+        //     setCategorias(data);
+        // };
 
         const GetUsers = async () => {
             try {
@@ -45,10 +45,61 @@ function App() {
             }
         };
 
+        const GetPosts = async () => {
+            try {
+                const resp = await fetch('http://localhost:3000/api/posts');
+                const data = await resp.json();
+        
+                if (!data.data) {
+                    throw new Error("La propiedad 'data' no está definida en la respuesta de la API");
+                }
+        
+                // Ahora actualizamos el estado con los posts obtenidos
+                setPosts(data.data.map(post => ({
+                    id: post._id,
+                    title: post.title,
+                    body: post.body,
+                    tags: post.tags,  // Este es un arreglo de tags
+                    likes: post.reactions.likes,
+                    dislikes: post.reactions.dislikes,
+                    views: post.views,
+                    userId: post.userId
+                })));
+            } catch (error) {
+                console.error('Error al obtener posts:', error);
+            }
+        };
+        
+
+        const GetComments = async () => {
+            try {
+                const resp = await fetch('http://localhost:3000/api/comments');
+                const data = await resp.json();
+        
+                if (!data.data) {
+                    throw new Error("La propiedad 'data' no está definida en la respuesta de la API");
+                }
+        
+                // Ahora actualizamos el estado con los comentarios obtenidos
+                setComments(data.data.map(comment => ({
+                    id: comment._id,
+                    body: comment.body,
+                    likes: comment.likes,
+                    userId: comment.userId,
+                    postId: comment.postId
+                })));
+            } catch (error) {
+                console.error('Error al obtener comentarios:', error);
+            }
+        };
+        
+
         if (logeado) {
-            GetUsers(); // Obtener usuarios solo si está logueado
-            getCategories();
+            GetUsers(); 
+            GetPosts();
+            GetComments();
         }
+        
     }, [recargar, logeado]);
 
     const iniciarRecarga = () => {
@@ -112,25 +163,48 @@ function App() {
                 <Route path="*" element={<p>Página no encontrada</p>} />
             </Routes>
 
-            <select>
-                <option value="">Usuarios</option>
-                <option value="">Posts</option>
-                <option value="">Comments</option>
-            </select>
 
             {logeado && (
-                <section>
-                    <h2>Usuarios</h2>
-                    {users.map(user => (
-                        <Column
-                        key={user.id}
-                        id={user.id}
-                        label={`Usuario: ${user.username}`}
-                        password={`Contraseña: ${user.password}`}
-                    />                    
-                    ))}
-                </section>
-            )}
+            <section className="container mx-auto px-4">
+                <h2 className="text-xl font-bold mt-4 mb-2">Usuarios</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {users.map(user => (
+                            <Card
+                                key={user.id}
+                                method="Usuario"
+                                endpoint={`ID: ${user.id}`}
+                                description={`Username: ${user.username} | Contraseña: ${user.password}`}
+                            />
+                        ))}
+                    </div>
+
+                    <h2 className="text-xl font-bold mt-8 mb-2">Posteos</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {posts.map(post => (
+                            <Card
+                                key={post.id}
+                                method={`Post: ${post.title}`}
+                                endpoint={`Tags: ${post.tags.join(', ')}`}
+                                description={`Likes: ${post.likes}, Dislikes: ${post.dislikes}, Vistas: ${post.views}`}
+                            />
+                        ))}
+                    </div>
+
+                    <h2 className="text-xl font-bold mt-8 mb-2">Comentarios</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {comments.map(comment => (
+                            <Card
+                                key={comment.id}
+                                method="Comentario"
+                                endpoint={`Usuario ID: ${comment.userId} | Post ID: ${comment.postId}`}
+                                description={`Comentario: ${comment.body} | Likes: ${comment.likes}`}
+                            />
+                        ))}
+                    </div>
+    </section>
+)}
+
+
 
             <Footer />
         </>
