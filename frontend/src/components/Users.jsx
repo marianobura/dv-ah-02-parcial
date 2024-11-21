@@ -27,17 +27,19 @@ function Users() {
 
     return (
         <>
-            <h2 className="text-xl font-bold mt-4 mb-2">Usuarios</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {users.map(user => (
-                    <Card
-                        key={user.id}
-                        method="Usuario"
-                        endpoint={`ID: ${user.id}`}
-                        description={`Username: ${user.username} | Contraseña: ${user.password}`}
-                    />
-                ))}
-            </div>
+            <ul key={users.id} role="list" className="divide-y divide-gray-100">
+            {users.map((user) => (
+                <li className="flex flex-col justify-between gap-x-6 py-5">
+                    <div className="w-fit px-2 py-1 rounded-full bg-gray-900 text-sm/3 text-white">ID: {user.id}</div>
+                    <div className="flex min-w-0 gap-x-4">
+                        <div className="min-w-0 flex-auto items-center">
+                            <p className="text-sm/6 font-semibold text-gray-900">{user.username}</p>
+                            <p className="text-sm/6 text-gray-600">{user.password}</p>
+                        </div>
+                    </div>
+                </li>
+            ))}
+            </ul>
         </>
     )
 }
