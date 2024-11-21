@@ -1,17 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function Comments() {
     let [comments, setComments] = useState([]);
+    let [formData, setFormData] = useState({ body: '', likes: '', userId: '', postId: '' });
+    let [method, setMethod] = useState("POST");
 
     const getComments = async () => {
         try {
             const resp = await fetch('http://localhost:3000/api/comments');
             const data = await resp.json();
-    
             if (!data.data) {
                 throw new Error("La propiedad 'data' no está definida en la respuesta de la API");
             }
-    
             setComments(data.data.map(comment => ({
                 id: comment._id,
                 body: comment.body,
@@ -25,14 +25,21 @@ function Comments() {
         }
     };
 
-    getComments();
+    useEffect(() => {
+        getComments();
+    }, []); // Solo se ejecuta una vez al montar el componente
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        // Lógica para enviar el formulario dependiendo del método seleccionado (POST, PUT, DELETE)
+    };
 
     return (
         <>
             <h2 className="text-xl font-bold mt-4 mb-2">Comentarios</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {comments.map(comment => (
-                    <li key={comment.postId} className="flex justify-between gap-x-6 py-5">
+                {comments.map((comment) => (
+                    <li key={comment.id} className="flex justify-between gap-x-6 py-5">
                         <div className="flex min-w-0 gap-x-4">
                             <div className="min-w-0 flex-auto">
                                 <p className="text-sm/6 font-semibold text-gray-900">Usuario: {comment.username} ({comment.userId})</p>
@@ -43,8 +50,53 @@ function Comments() {
                     </li>
                 ))}
             </div>
+
+            <form onSubmit={handleSubmit}>
+                <input 
+                    type="text" 
+                    name="id" 
+                    placeholder="ID del Comentario" 
+                    value={formData.id}
+                    onChange={(e) => setFormData({...formData, id: e.target.value})}
+                />
+                <input 
+                    type="text" 
+                    name="body" 
+                    placeholder="Comentario" 
+                    value={formData.body}
+                    onChange={(e) => setFormData({...formData, body: e.target.value})}
+                />
+                <input 
+                    type="number" 
+                    name="likes" 
+                    placeholder="Likes" 
+                    value={formData.likes}
+                    onChange={(e) => setFormData({...formData, likes: e.target.value})}
+                />
+                <input 
+                    type="text" 
+                    name="userId" 
+                    placeholder="ID Usuario" 
+                    value={formData.userId}
+                    onChange={(e) => setFormData({...formData, userId: e.target.value})}
+                />
+                <input 
+                    type="text" 
+                    name="postId" 
+                    placeholder="ID Post" 
+                    value={formData.postId}
+                    onChange={(e) => setFormData({...formData, postId: e.target.value})}
+                />
+
+                <select onChange={(e) => setMethod(e.target.value)}>
+                    <option value="POST">POST</option>
+                    <option value="PUT">PUT</option>
+                    <option value="DELETE">DELETE</option>
+                </select>
+                <button type="submit">Enviar</button>
+            </form>
         </>
     );
-};
+}
 
 export default Comments;

@@ -33,10 +33,9 @@ const Login = ({ setIsAuthenticated }) => {
             const data = await response.json();
             console.log(data);
 
-            // Suponemos que el login devuelve un token o indicador
             if (data.token) {
-                localStorage.setItem('authToken', data.token); // Guardar el token
-                setIsAuthenticated(true); // Establecer autenticación
+                localStorage.setItem('authToken', data.token); 
+                setIsAuthenticated(true);
             }
 
             setFormData({
