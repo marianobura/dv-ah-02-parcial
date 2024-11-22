@@ -28,3 +28,9 @@ es necesario los siguientes comandos
 
 - [backend] iniciar con npm start
 - [frontend] iniciar con npm run dev
+
+# Integrantes
+
+- Mariano Buranits
+- Eric Jacobsen
+- Sebastian Winter
