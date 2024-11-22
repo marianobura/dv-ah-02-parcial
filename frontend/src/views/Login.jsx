@@ -14,7 +14,7 @@ const Login = ({ setIsAuthenticated }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const endPoint = 'http://127.0.0.1:3000/api/users/login';
+            const endPoint = 'http://127.0.0.1:5000/api/users/login';
             const config = {
                 headers: {
                     'Content-Type': 'application/json'
@@ -43,7 +43,7 @@ const Login = ({ setIsAuthenticated }) => {
                 password: ''
             });
         } catch (error) {
-            console.error('Error al intentar loguear', error);
+            // console.error('Error al intentar loguear', error);
         }
     };
 
