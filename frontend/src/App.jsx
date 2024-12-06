@@ -4,7 +4,7 @@ import Footer from './components/Footer';
 import Home from './views/Home'
 import Registro from './views/Registro';
 import Login from './views/Login';
-import Crud from './views/Crud'
+import Endpoints from './views/Endpoints'
 
 function App() {
     return (
@@ -13,7 +13,7 @@ function App() {
             <Routes>
                 <Route path="/registro" element={<Registro />} />
                 <Route path="/login" element={<Login />} />
-                <Route path="/crud" element={<Crud />} />
+                <Route path="/endpoints" element={<Endpoints />} />
                 <Route path="/" element={<Home />} />
                 <Route path="*" element={<p>Página no encontrada</p>} />
             </Routes>

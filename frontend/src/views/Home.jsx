@@ -1,58 +1,53 @@
-import Column from '../components/Column'
-import Card from '../components/Card'
+import { useState } from "react";
+import Users from '../components/Users'
+import Posts from '../components/Posts'
+import Comments from "../components/Comments";
 
 function Home() {
-    const data = {
-        users: [
-            { method: "GET", endpoint: "/api/users", description: "Obtiene todos los usuarios" },
-            { method: "POST", endpoint: "/api/users/login", description: "Inicia sesión con un usuario" },
-            { method: "GET", endpoint: "/api/users/:id", description: "Obtiene un usuario por ID" },
-            { method: "DELETE", endpoint: "/api/users/:id", description: "Elimina un usuario por ID" },
-            { method: "PUT", endpoint: "/api/users/:id", description: "Actualiza un usuario por ID" },
-        ],
-        posts: [
-            { method: "GET", endpoint: "/api/posts", description: "Obtiene todos los posteos" },
-            { method: "GET", endpoint: "/api/posts?sort=top", description: "Obtiene todos los posteos ordenados de mayor a menor likes" },
-            { method: "GET", endpoint: "/api/posts?sort=views", description: "Obtiene todos los posteos ordenados de mayor a menor vistas" },
-            { method: "GET", endpoint: "/api/posts/user/:userId", description: "Obtiene un posteo de un usuario por su ID" },
-            { method: "GET", endpoint: "/api/posts/:id", description: "Obtiene un posteo por ID" },
-            { method: "GET", endpoint: "/api/posts/name/:title", description: "Obtiene un posteo por su título" },
-            { method: "POST", endpoint: "/api/posts", description: "Crea un nuevo posteo" },
-            { method: "DELETE", endpoint: "/api/posts/:id", description: "Elimina un posteo por ID" },
-            { method: "PUT", endpoint: "/api/posts/:id", description: "Actualiza un posteo por ID" },
-        ],
-        comments: [
-            { method: "GET", endpoint: "/api/comments", description: "Obtiene todos los comentarios" },
-            { method: "POST", endpoint: "/api/comments", description: "Crea un nuevo comentario" },
-            { method: "GET", endpoint: "/api/comments/user/:userId", description: "Obtiene todos los comentarios de un usuario" },
-            { method: "GET", endpoint: "/api/comments/:id", description: "Obtiene todos los comentarios de un post" },
-            { method: "DELETE", endpoint: "/api/comments/:id", description: "Elimina un comentario por ID" },
-            { method: "PUT", endpoint: "/api/comments/:id", description: "Actualiza un comentario por ID" },
-        ],
+    const [selection, setSelection] = useState("users");
+
+    const handleSelectionChange = (e) => {
+        setSelection(e.target.value);
+    };
+
+    const renderContent = () => {
+        switch (selection) {
+            case "users":
+                return (
+                    <Users />
+                );
+            case "posts":
+                return (
+                    <Posts />
+                )
+            case "comments":
+                return (
+                    <Comments />
+                );
+            default:
+                return null;
+        }
     };
 
     return (
-        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mx-8">
-            <Column id="user" label="Usuarios">
-                <h2 className="sr-only">Usuarios</h2>
-                {data.users.map((user, index) => (
-                    <Card key={index} method={user.method} endpoint={user.endpoint} description={user.description} />
-                ))}
-            </Column>
-            <Column id="post" label="Posteos">
-                <h2 className="sr-only">Posteos</h2>
-                {data.posts.map((post, index) => (
-                    <Card key={index} method={post.method} endpoint={post.endpoint} description={post.description} />
-                ))}
-            </Column>
-            <Column id="comment" label="Comentarios">
-                <h2 className="sr-only">Comentarios</h2>
-                {data.comments.map((comment, index) => (
-                    <Card key={index} method={comment.method} endpoint={comment.endpoint} description={comment.description} />
-                ))}
-            </Column>
-        </section>
-    )
+        <>
+            <section className="container mx-auto px-4">
+                <div className="w-full max-w-sm min-w-[200px] mt-4">
+                    <div className="relative">
+                        <select value={selection} onChange={handleSelectionChange} className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded pl-3 pr-8 py-3 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md appearance-none cursor-pointer">
+                            <option value="users">Usuarios</option>
+                            <option value="posts">Posteos</option>
+                            <option value="comments">Comentarios</option>
+                        </select>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.2" stroke="currentColor" className="h-5 w-5 ml-1 absolute top-3.5 right-2.5 text-slate-700">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
+                        </svg>
+                    </div>
+                </div>
+                {renderContent()}
+            </section>
+        </>
+    );
 }
 
 export default Home;

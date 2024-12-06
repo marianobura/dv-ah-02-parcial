@@ -13,7 +13,7 @@ function Header() {
                 <NavLink to='/'>Inicio</NavLink>
                 <NavLink to='/registro'>Registro</NavLink>
                 <NavLink to='/login'>Iniciar sesión</NavLink>
-                <NavLink to='/crud'>Crud</NavLink>
+                <NavLink to='/endpoints'>Endpoints</NavLink>
             </div>
         </header>
     );
