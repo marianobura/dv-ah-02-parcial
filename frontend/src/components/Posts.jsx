@@ -24,8 +24,8 @@ function Posts() {
                     likes: post.reactions.likes,
                     dislikes: post.reactions.dislikes,
                     views: post.views,
-                    userId: post.userId,
-                    user: post.user || null,
+                    userId: post.user._id,
+                    username: post.user.username,
                 })));
             } else {
                 console.error("La respuesta no contiene un arreglo de posts.");
@@ -102,21 +102,30 @@ function Posts() {
     return (
         <>
             <h2 className="text-xl font-bold mt-4 mb-2">Posteos</h2>
-            <ul className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <ul role="list" className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 {posts.map(post => (
                     <li key={post.id} className="p-3 border border-neutral-200">
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-4">
                             <div className="size-12 flex items-center justify-center bg-blue-800 rounded-full text-white">
-                                {post.user ? post.user.username.charAt(0).toUpperCase() : '?'}
+                                {post.username ? post.username.charAt(0).toUpperCase() : '?'}
                             </div>
-                            <div className="flex flex-col gap-1">
-                                <p>{post.user ? post.user.username : 'No encontrado'} <span className="text-sm text-neutral-600">({post.user ? post.user._id : 'No encontrado'})</span></p>
-                                <p className="text-sm text-neutral-600">{post.tags.join(', ')}</p>
+                            <div className="flex flex-col">
+                                <p>{post.username ? post.username : 'No encontrado'}</p>
+                                <p className="text-gray-500">{post.userId ? post.userId : 'No encontrado'}</p>
                             </div>
                         </div>
                         <div className="mt-2">
                             <h3 className="text-lg font-bold">{post.title}</h3>
                             <p>{post.body}</p>
+                        </div>
+                        <div className="mt-2">
+                            <div className="flex gap-2 text-white">
+                                {post.tags.map((tag, index) => (
+                                    <span key={index} className="rounded-full bg-blue-800 text-white px-2 py-1 text-sm">
+                                        {tag}
+                                    </span>
+                                ))}
+                            </div>
                         </div>
                         <div className="flex items-center justify-between gap-2 mt-2 pt-2 border-t">
                             <div className="flex gap-2">
@@ -140,53 +149,53 @@ function Posts() {
             </ul>
 
             <form onSubmit={handleSubmit} className="pt-12">
-            <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    <div class="w-full">
-                        <label for="id" class="block font-medium text-gray-900">ID del post</label>
-                        <div class="mt-2">
-                            <input type="text" name="id" id="id" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.id} onChange={(e) => setFormData({...formData, id: e.target.value})} />
+            <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <div className="w-full">
+                        <label htmlFor="id" className="block font-medium text-gray-900">ID del post</label>
+                        <div className="mt-2">
+                            <input type="text" name="id" id="id" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.id} onChange={(e) => setFormData({...formData, id: e.target.value})} />
                         </div>
                     </div>
-                    <div class="w-full">
-                        <label for="title" class="block font-medium text-gray-900">Título</label>
-                        <div class="mt-2">
-                            <input type="text" name="title" id="title" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.title} onChange={(e) => setFormData({...formData, title: e.target.value})} />
+                    <div className="w-full">
+                        <label htmlFor="title" className="block font-medium text-gray-900">Título</label>
+                        <div className="mt-2">
+                            <input type="text" name="title" id="title" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.title} onChange={(e) => setFormData({...formData, title: e.target.value})} />
                         </div>
                     </div>
-                    <div class="w-full">
-                        <label for="body" class="block font-medium text-gray-900">Contenido</label>
-                        <div class="mt-2">
-                            <input type="text" name="body" id="body" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.body} onChange={(e) => setFormData({...formData, body: e.target.value})} />
+                    <div className="w-full">
+                        <label htmlFor="body" className="block font-medium text-gray-900">Contenido</label>
+                        <div className="mt-2">
+                            <input type="text" name="body" id="body" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.body} onChange={(e) => setFormData({...formData, body: e.target.value})} />
                         </div>
                     </div>
-                    <div class="w-full">
-                        <label for="tags" class="block font-medium text-gray-900">Etiquetas</label>
-                        <div class="mt-2">
-                            <input type="text" name="tags" id="tags" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.tags} onChange={(e) => setFormData({...formData, tags: e.target.value})} />
+                    <div className="w-full">
+                        <label htmlFor="tags" className="block font-medium text-gray-900">Etiquetas</label>
+                        <div className="mt-2">
+                            <input type="text" name="tags" id="tags" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.tags} onChange={(e) => setFormData({...formData, tags: e.target.value})} />
                         </div>
                     </div>
-                    <div class="w-full">
-                        <label for="likes" class="block font-medium text-gray-900">Me gustas</label>
-                        <div class="mt-2">
-                            <input type="number" name="likes" id="likes" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.likes} onChange={(e) => setFormData({...formData, likes: e.target.value})} />
+                    <div className="w-full">
+                        <label htmlFor="likes" className="block font-medium text-gray-900">Me gustas</label>
+                        <div className="mt-2">
+                            <input type="number" name="likes" id="likes" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.likes} onChange={(e) => setFormData({...formData, likes: e.target.value})} />
                         </div>
                     </div>
-                    <div class="w-full">
-                        <label for="dislikes" class="block font-medium text-gray-900">No me gustas</label>
-                        <div class="mt-2">
-                            <input type="number" name="dislikes" id="dislikes" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.dislikes} onChange={(e) => setFormData({...formData, dislikes: e.target.value})} />
+                    <div className="w-full">
+                        <label htmlFor="dislikes" className="block font-medium text-gray-900">No me gustas</label>
+                        <div className="mt-2">
+                            <input type="number" name="dislikes" id="dislikes" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.dislikes} onChange={(e) => setFormData({...formData, dislikes: e.target.value})} />
                         </div>
                     </div>
-                    <div class="w-full">
-                        <label for="views" class="block font-medium text-gray-900">Vistas</label>
-                        <div class="mt-2">
-                            <input type="number" name="views" id="views" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.views} onChange={(e) => setFormData({...formData, views: e.target.value})} />
+                    <div className="w-full">
+                        <label htmlFor="views" className="block font-medium text-gray-900">Vistas</label>
+                        <div className="mt-2">
+                            <input type="number" name="views" id="views" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.views} onChange={(e) => setFormData({...formData, views: e.target.value})} />
                         </div>
                     </div>
-                    <div class="w-full">
-                        <label for="userId" class="block font-medium text-gray-900">ID del usuario</label>
-                        <div class="mt-2">
-                            <input type="text" name="userId" id="userId" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.userId} onChange={(e) => setFormData({...formData, userId: e.target.value})} />
+                    <div className="w-full">
+                        <label htmlFor="userId" className="block font-medium text-gray-900">ID del usuario</label>
+                        <div className="mt-2">
+                            <input type="text" name="userId" id="userId" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.userId} onChange={(e) => setFormData({...formData, userId: e.target.value})} />
                         </div>
                     </div>
                     <div className="flex items-end gap-4">

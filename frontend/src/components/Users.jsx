@@ -72,48 +72,47 @@ function Users() {
 
     return (
         <>
-            <div class="flow-root">
-                <ul role="list" class="divide-y divide-gray-200 grid grid-cols-2 gap-x-6">
-                    {users.map((user) => (
-                        <li key={user.id} className="py-3 sm:py-4">
-                            <div class="flex items-center space-x-4">
-                                <div class="flex-shrink-0">
-                                    <div className="size-12 flex items-center justify-center bg-blue-800 rounded-full text-white">
-                                        {user.username ? user.username.charAt(0).toUpperCase() : '?'}
-                                    </div>
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <p class="font-medium text-gray-900 truncate">
-                                        {user.username}
-                                    </p>
-                                    <p class="text-gray-500 truncate">
-                                        {user.id}
-                                    </p>
+            <h2 className="text-xl font-bold mt-4 mb-2">Usuarios</h2>
+            <ul role="list" className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                {users.map((user) => (
+                    <li key={user.id} className="p-3 border border-neutral-200">
+                        <div className="flex items-center gap-4">
+                            <div className="flex-shrink-0">
+                                <div className="size-12 flex items-center justify-center bg-blue-800 rounded-full text-white">
+                                    {user.username ? user.username.charAt(0).toUpperCase() : '?'}
                                 </div>
                             </div>
-                        </li>
-                    ))}
-                </ul>
-            </div>
+                            <div className="flex-1 min-w-0">
+                                <p className="font-medium text-gray-900 truncate">
+                                    {user.username}
+                                </p>
+                                <p className="text-gray-500 truncate">
+                                    {user.id}
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+                ))}
+            </ul>
 
             <form onSubmit={handleSubmit} className="pt-12">
-                <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    <div class="w-full">
-                        <label for="username-id" class="block font-medium text-gray-900">ID del usuario</label>
-                        <div class="mt-2">
-                            <input type="text" name="username-id" id="username-id" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.id} onChange={(e) => setFormData({...formData, id: e.target.value})} />
+                <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <div className="w-full">
+                        <label htmlFor="username-id" className="block font-medium text-gray-900">ID del usuario</label>
+                        <div className="mt-2">
+                            <input type="text" name="username-id" id="username-id" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.id} onChange={(e) => setFormData({...formData, id: e.target.value})} />
                         </div>
                     </div>
-                    <div class="w-full">
-                        <label for="username" class="block font-medium text-gray-900">Nombre de usuario</label>
-                        <div class="mt-2">
-                            <input type="text" name="username" id="username" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.username} onChange={(e) => setFormData({...formData, username: e.target.value})} />
+                    <div className="w-full">
+                        <label htmlFor="username" className="block font-medium text-gray-900">Nombre de usuario</label>
+                        <div className="mt-2">
+                            <input type="text" name="username" id="username" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.username} onChange={(e) => setFormData({...formData, username: e.target.value})} />
                         </div>
                     </div>
-                    <div class="w-full">
-                        <label for="password" class="block font-medium text-gray-900">Contraseña</label>
-                        <div class="mt-2">
-                            <input type="password" name="password" id="password" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.password} onChange={(e) => setFormData({...formData, password: e.target.value})} />
+                    <div className="w-full">
+                        <label htmlFor="password" className="block font-medium text-gray-900">Contraseña</label>
+                        <div className="mt-2">
+                            <input type="password" name="password" id="password" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.password} onChange={(e) => setFormData({...formData, password: e.target.value})} />
                         </div>
                     </div>
                     <div className="flex items-end gap-4">
