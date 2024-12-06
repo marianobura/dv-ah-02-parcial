@@ -111,7 +111,7 @@ function Posts() {
                             </div>
                             <div className="flex flex-col">
                                 <p>{post.username ? post.username : 'No encontrado'}</p>
-                                <p className="text-gray-500">{post.userId ? post.userId : 'No encontrado'}</p>
+                                <p className="text-gray-500">Usuario: {post.userId ? post.userId : 'No encontrado'}</p>
                             </div>
                         </div>
                         <div className="mt-2">
@@ -142,7 +142,7 @@ function Posts() {
                                     <p>{post.dislikes}</p>
                                 </div>
                             </div>
-                            <p className="inline text-sm">{post.id}</p>
+                            <p className="inline text-sm">Post: {post.id}</p>
                         </div>
                     </li>
                 ))}

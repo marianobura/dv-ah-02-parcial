@@ -87,7 +87,7 @@ function Users() {
                                     {user.username}
                                 </p>
                                 <p className="text-gray-500 truncate">
-                                    {user.id}
+                                    Usuario: {user.id}
                                 </p>
                             </div>
                         </div>

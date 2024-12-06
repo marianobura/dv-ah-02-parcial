@@ -89,13 +89,13 @@ function Comments() {
                             </div>
                             <div className="flex flex-col">
                                 <p>{comment.username ? comment.username : 'No encontrado'}</p>
-                                <p className="text-gray-500">{comment.userId ? comment.userId : 'No encontrado'}</p>
+                                <p className="text-gray-500">Usuario: {comment.userId ? comment.userId : 'No encontrado'}</p>
                             </div>
                         </div>
                         <div className="flex flex-col gap-1 mt-2">
                             <div className="flex gap-2 text-blue-500">
                                 <CornerDownRight size={16} />
-                                <span className="text-sm">Comentando en {comment.postId}</span>
+                                <span className="text-sm">Comentando en (Post: {comment.postId})</span>
                             </div>
                             <p>{comment.body}</p>
                         </div>
@@ -104,7 +104,7 @@ function Comments() {
                                 <ThumbsUp size={20} />
                                 <p>{comment.likes}</p>
                             </div>
-                            <p className="inline text-sm">{comment.id}</p>
+                            <p className="flex text-sm">Comentario: {comment.id}</p>
                         </div>
                     </li>
                 ))}
