@@ -9,17 +9,17 @@ const secretKey = process.env.SECRETKEY;
 const salt = 10;
 
 const createUser = async (req, res) => {
-    const { username, password } = req.body;
+    const { username, password, email } = req.body;
 
-    if (!username || !password) {
-        res.status(400).json({ msg: 'Faltan paramátros obligatorios', data: { username, password } })
+    if (!username || !password || !email) {
+        res.status(400).json({ msg: 'Faltan paramátros obligatorios', data: { username, password, email } })
     }
 
     const passwordHash = await bcrypt.hash(password, salt);
 
     try {
         // Creo una instancia del modelo
-        const newUser = new User({ username, password: passwordHash })
+        const newUser = new User({ username, password: passwordHash, email })
         await newUser.save();
         res.status(200).json({ msg: 'Usuario creado', data: newUser })
     } catch (error) {
@@ -30,20 +30,20 @@ const createUser = async (req, res) => {
 }
 
 const login = async (req, res) => {
-    const { username, password } = req.body;
+    const { password, email } = req.body;
 
     try {
-        const user = await User.findOne({ username });
-        if (!user) {
-            return res.status(401).json({ msg: 'El usuario no existe' });
+        const user = await User.findOne({ email });
+        if (!email) {
+            return res.status(401).json({ msg: 'El email no existe' });
         }
 
-        const passwordOk = await bcrypt.compare(password, user.password);
+        const passwordOk = await bcrypt.compare(password, email.password);
         if (!passwordOk) {
             return res.status(401).json({ msg: 'Contraseña incorrecta' });
         }
 
-        const token = jwt.sign({ userId: user._id, username: user.username }, secretKey, { expiresIn: '1h' });
+        const token = jwt.sign({ userId: user._id, username: user.username, email: user.email }, secretKey, { expiresIn: '1h' });
 
         res.status(200).json({ msg: 'Inicio de sesión exitoso', token });
     } catch (error) {
@@ -95,12 +95,12 @@ const deleteUserById = async (req, res) => {
 }
 const updateUserById = async (req, res) => {
     const { id } = req.params;
-    const { username, password } = req.body;
+    const { username, password, email } = req.body;
 
     const passwordHash = await bcrypt.hash(password, salt);
 
     try {
-        const user = await User.findByIdAndUpdate(id, { username, password: passwordHash }, { new: true });
+        const user = await User.findByIdAndUpdate(id, { username, password: passwordHash, email }, { new: true });
         if (user) {
             res.status(200).json({ msg: "success", data: user });
         } else {
