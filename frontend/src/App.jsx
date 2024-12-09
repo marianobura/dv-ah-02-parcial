@@ -4,7 +4,14 @@ import Footer from './components/Footer';
 import Home from './views/Home'
 import Registro from './views/Registro';
 import Login from './views/Login';
-import Endpoints from './views/Endpoints'
+import Endpoints from './views/Endpoints';
+
+import { PrivateRoute } from './utils/PrivateRoute';
+
+import { AuthProvider } from './utils/AuthContext';
+
+
+
 
 function App() {
     return (

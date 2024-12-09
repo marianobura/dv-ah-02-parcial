@@ -41,6 +41,8 @@ const Registro = () => {
                 password: ''
             });
 
+            navigate('/login');
+
         } catch (error) {
             console.log(error);
             alert('Error del Servidor');

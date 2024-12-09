@@ -133,13 +133,13 @@ function Comments() {
                     <div className="w-full">
                         <label htmlFor="userId" className="block font-medium text-gray-900">ID del usuario</label>
                         <div className="mt-2">
-                            <input type="number" name="userId" id="userId" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.userId} onChange={(e) => setFormData({...formData, userId: e.target.value})} />
+                            <input type="text" name="userId" id="userId" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.userId} onChange={(e) => setFormData({...formData, userId: e.target.value})} />
                         </div>
                     </div>
                     <div className="w-full">
                         <label htmlFor="postId" className="block font-medium text-gray-900">ID del post</label>
                         <div className="mt-2">
-                            <input type="number" name="postId" id="postId" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.postId} onChange={(e) => setFormData({...formData, postId: e.target.value})} />
+                            <input type="text" name="postId" id="postId" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.postId} onChange={(e) => setFormData({...formData, postId: e.target.value})} />
                         </div>
                     </div>
                     <div className="flex items-end gap-4">

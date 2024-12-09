@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import { useNavigate } from "react-router-dom";
 
 const Login = ({ setIsAuthenticated }) => {
     const [formData, setFormData] = useState({
         username: '',
-        password: ''
+        password: '',
+        email: ''
     });
 
     const handleChange = (event) => {
@@ -38,9 +40,20 @@ const Login = ({ setIsAuthenticated }) => {
                 setIsAuthenticated(true);
             }
 
+            // if( data.data.jwt) {
+            //     // Cuando el back me dio ok
+            //         // Actualizamos el contextos con el dato del usuario 'ok' y el token
+            //         login( 'ok', data.data.jwt );
+            //         // Cambiamos la ruta a la home
+            //         navigate('/');
+            //     } else {
+            //         alert('Usuario o contraseña invalidos')
+            //     }
+
             setFormData({
                 username: '',
-                password: ''
+                password: '',
+                email: ''
             });
         } catch (error) {
             // console.error('Error al intentar loguear', error);
@@ -57,8 +70,8 @@ const Login = ({ setIsAuthenticated }) => {
                         </h1>
                         <form className="space-y-4 md:space-y-6" onSubmit={ handleSubmit }>
                             <div>
-                                <label htmlFor="username" className="block mb-2 text-sm font-medium text-gray-900">Nombre</label>
-                                <input type="username" name="username" id="username" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Juan Pedro" required="" onChange={handleChange} value={formData.username} />
+                                <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">Correo electrónico</label>
+                                <input type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="google@gmail.com" required="" onChange={handleChange} value={formData.email} />
                             </div>
                             <div>
                                 <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900">Contraseña</label>
