@@ -8,6 +8,29 @@ dotenv.config();
 const secretKey = process.env.SECRETKEY;
 const salt = 10;
 
+exports.autenticar = async (req, res) => {
+    try{
+        const { email, password } = req.body;
+        const user = await usersModel.findOne({email});
+
+    if( !user){
+        return res.status(401).json({msg: 'El email no existe'});
+    }
+
+    const passwordOk = await bcrypt.compare(password, user.password);
+    if(!passwordOk){
+        return res.status(401).json({msg: 'Contraseña incorrecta'});
+    }
+
+    const token = jwt.sign({userId: user._id, username: user.username, email: user.email}, secretKey, {expiresIn: '1h'});
+    res.status(200).json({msg: 'Inicio de sesión exitoso', token});
+    } catch (error) {
+    console.error(error);
+    res.status(500).json({msg: 'Error al iniciar sesión', error: error.message});
+    }
+}
+
+
 const createUser = async (req, res) => {
     const { username, password, email } = req.body;
 
@@ -30,9 +53,9 @@ const createUser = async (req, res) => {
 }
 
 const login = async (req, res) => {
-    const { password, email } = req.body;
-
+    
     try {
+        const { password, email } = req.body;
         const user = await User.findOne({ email });
         if (!email) {
             return res.status(401).json({ msg: 'El email no existe' });
@@ -43,7 +66,14 @@ const login = async (req, res) => {
             return res.status(401).json({ msg: 'Contraseña incorrecta' });
         }
 
-        const token = jwt.sign({ userId: user._id, username: user.username, email: user.email }, secretKey, { expiresIn: '1h' });
+        const data = {
+            userId: user._id,
+            name: user.username,
+            email: user.email,
+            password: user.password
+        }
+
+        const token = jwt.sign( data, { userId: user._id, username: user.username, email: user.email }, secretKey, { expiresIn: '1h' });
 
         res.status(200).json({ msg: 'Inicio de sesión exitoso', token });
     } catch (error) {
