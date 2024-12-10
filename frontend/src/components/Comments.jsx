@@ -10,9 +10,7 @@ function Comments() {
         try {
             const resp = await fetch('http://localhost:3000/api/comments');
             const data = await resp.json();
-            if (!data.data) {
-                throw new Error("La propiedad 'data' no está definida en la respuesta de la API");
-            }
+            
             setComments(data.data.map(comment => ({
                 id: comment._id,
                 body: comment.body,

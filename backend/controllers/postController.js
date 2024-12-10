@@ -2,7 +2,6 @@ const Post = require('../models/postsModels');
 const User = require('../models/usersModels');
 
 const createPost = async (req, res) => {
-    //el userId lo esta pasando el middleware que obtiene el userId al decodificar el token
     const { title, body, tags, reactions, views, userId } = req.body;
 
     if (!title || !body || !userId) {
@@ -25,17 +24,14 @@ const createPost = async (req, res) => {
 }
 
 const getPosts = async (req, res) => {
-    const userId = req.body.userId;
     const { sort } = req.query; 
     try {
-        let postsQuery = Post.find( {user: userId} ).populate('user');
+        let postsQuery = Post.find().populate('user');
 
-       
         if (sort === 'top') {
             postsQuery = postsQuery.sort({ reactions: -1 });
         }
 
-       
         if (sort === 'views') {
             postsQuery = postsQuery.sort({ views: -1 });
         }

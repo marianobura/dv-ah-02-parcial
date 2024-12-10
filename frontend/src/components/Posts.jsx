@@ -14,32 +14,22 @@ function Posts() {
         try {
             const resp = await fetch('http://localhost:3000/api/posts');
             const data = await resp.json();
-            if (Array.isArray(data.data)) {
-                console.log(data.data); 
-                setPosts(data.data.map(post => ({
-                    id: post._id,
-                    title: post.title,
-                    body: post.body,
-                    tags: post.tags || [],
-                    likes: post.reactions.likes,
-                    dislikes: post.reactions.dislikes,
-                    views: post.views,
-                    userId: post.user._id,
-                    username: post.user.username,
-                })));
-            } else {
-                console.error("La respuesta no contiene un arreglo de posts.");
-            }
+
+            setPosts(data.data.map(post => ({
+                id: post._id,
+                title: post.title,
+                body: post.body,
+                tags: post.tags || [],
+                likes: post.reactions.likes,
+                dislikes: post.reactions.dislikes,
+                views: post.views,
+                userId: post.user._id,
+                username: post.user.username,
+            })));
         } catch (error) {
             console.error('Error al obtener posts:', error);
         }
     };
-    
-
-    useEffect(() => {
-        getPosts(); 
-    }, []);
-
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -149,7 +139,7 @@ function Posts() {
             </ul>
 
             <form onSubmit={handleSubmit} className="pt-12">
-            <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     <div className="w-full">
                         <label htmlFor="id" className="block font-medium text-gray-900">ID del post</label>
                         <div className="mt-2">

@@ -32,7 +32,7 @@ const getCommentsByPostId = async (req, res) => {
         if (comments.length > 0) {
             res.status(200).json({ msg: "success", data: comments });
         } else {
-            res.status(404).json({ msg: "No se encontró ningún comentario para ese post ", data: {} });
+            res.status(404).json({ msg: "No se encontró ningún comentario para ese post", data: {} });
         }
     }
     catch (error) {

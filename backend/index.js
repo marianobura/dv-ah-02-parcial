@@ -4,14 +4,14 @@ require('dotenv').config();
 const User = require('./models/usersModels');
 const routerAPI = require('./routes');
 const cors = require('cors');
+require('dotenv').config();
 
 
 // accedemos a la variable de Entorno
 const port = process.env.PORT;
-const uridb = process.env.URI_BD;
 
 // Conectamos a la db
-mongoose.connect( uridb, { })
+mongoose.connect(process.env.URI_BD, { useNewUrlParser: true, useUnifiedTopology: true })
 const db = mongoose.connection;
 
 db.on('error', () => console.error('Error'));

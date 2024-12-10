@@ -9,12 +9,11 @@ function Users() {
         try {
             const resp = await fetch('http://localhost:3000/api/users');
             const data = await resp.json();
-            if (!data.data) {
-                throw new Error("La propiedad 'data' no está definida en la respuesta de la API");
-            }
+
             setUsers(data.data.map(user => ({
                 id: user._id,
                 username: user.username,
+                email: user.email,
                 password: user.password,
             })));
         } catch (error) {
@@ -29,9 +28,7 @@ function Users() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const url = method === "DELETE" || method === "PUT" 
-            ? `http://localhost:3000/api/users/${formData.id}`
-            : `http://localhost:3000/api/users`;
+        const url = method === "DELETE" || method === "PUT" ? `http://localhost:3000/api/users/${formData.id}` : `http://localhost:3000/api/users`;
 
         try {
             let response;
@@ -47,6 +44,7 @@ function Users() {
                     },
                     body: JSON.stringify({
                         username: formData.username,
+                        email: formData.email,
                         password: formData.password,
                     }),
                 });
@@ -83,12 +81,11 @@ function Users() {
                                 </div>
                             </div>
                             <div className="flex-1 min-w-0">
-                                <p className="font-medium text-gray-900 truncate">
-                                    {user.username}
-                                </p>
-                                <p className="text-gray-500 truncate">
-                                    Usuario: {user.id}
-                                </p>
+                                <div className="flex justify-between">
+                                    <p className="font-medium text-gray-900 truncate">{user.username}</p>
+                                    <span className="text-gray-500">ID: {user.id}</span>
+                                </div>
+                                <p className="text-gray-500 truncate">{user.email}</p>
                             </div>
                         </div>
                     </li>
@@ -101,6 +98,12 @@ function Users() {
                         <label htmlFor="username-id" className="block font-medium text-gray-900">ID del usuario</label>
                         <div className="mt-2">
                             <input type="text" name="username-id" id="username-id" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.id} onChange={(e) => setFormData({...formData, id: e.target.value})} />
+                        </div>
+                    </div>
+                    <div className="w-full">
+                        <label htmlFor="email" className="block font-medium text-gray-900">Correo electrónico</label>
+                        <div className="mt-2">
+                            <input type="email" name="email" id="email" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} />
                         </div>
                     </div>
                     <div className="w-full">
