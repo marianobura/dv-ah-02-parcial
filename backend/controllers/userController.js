@@ -28,28 +28,29 @@ const createUser = async (req, res) => {
 }
 
 const login = async (req, res) => {
-    const { password, email } = req.body;
+    const { email, password } = req.body;
 
     try {
         const user = await User.findOne({ email });
-        if (!email) {
+        if (!user) {
             return res.status(401).json({ msg: 'El email no existe' });
         }
 
-        const passwordOk = await bcrypt.compare(password, email.password);
+        const passwordOk = await bcrypt.compare(password, user.password);
         if (!passwordOk) {
             return res.status(401).json({ msg: 'Contraseña incorrecta' });
         }
 
-        const token = jwt.sign({ userId: user._id, username: user.username, email: user.email }, secretKey, { expiresIn: '1h' });
+        const data = { userId: user._id, username: user.username, email: user.email };
 
-        res.status(200).json({ msg: 'Inicio de sesión exitoso', token });
+        const token = jwt.sign(data, secretKey, { expiresIn: '1h' });
+
+        res.status(200).json({ msg: 'Inicio de sesión exitoso', data: { jwt: token, user: data }});
     } catch (error) {
         console.error(error);
         res.status(500).json({ msg: 'Error al iniciar sesión', error: error.message });
     }
 };
-
 
 const getUsers = async (req, res) => {
     try {
@@ -60,7 +61,6 @@ const getUsers = async (req, res) => {
         res.status(500).json({ msg: 'Error al obtener usuarios', error: error.message });
     }
 };
-
 
 const getUsersById = async (req, res) => {
     const { id } = req.params;
@@ -91,6 +91,7 @@ const deleteUserById = async (req, res) => {
         res.status(500).json({ msg: 'Hubo un error en el servidor', data: {} })
     }
 }
+
 const updateUserById = async (req, res) => {
     const { id } = req.params;
     const { username, password, email } = req.body;
@@ -110,6 +111,5 @@ const updateUserById = async (req, res) => {
         res.status(500).json({ msg: 'Hubo un error en el servidor', data: {} })
     }
 }
-
 
 module.exports = { createUser, getUsers, getUsersById, deleteUserById, updateUserById, login };

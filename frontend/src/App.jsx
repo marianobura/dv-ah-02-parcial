@@ -5,19 +5,22 @@ import Home from './views/Home'
 import Registro from './views/Registro';
 import Login from './views/Login';
 import Endpoints from './views/Endpoints';
+import { AuthProvider } from './utils/AuthContext';
 
 function App() {
     return (
         <>
-            <Header />
-            <Routes>
-                <Route path="/registro" element={<Registro />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/endpoints" element={<Endpoints />} />
-                <Route path="/" element={<Home />} />
-                <Route path="*" element={<p>Página no encontrada</p>} />
-            </Routes>
-            <Footer />
+            <AuthProvider>
+                <Header />
+                <Routes>
+                    <Route path="/registro" element={<Registro />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/endpoints" element={<Endpoints />} />
+                    <Route path="/" element={<Home />} />
+                    <Route path="*" element={<p>Página no encontrada</p>} />
+                </Routes>
+                <Footer />
+            </AuthProvider>
         </>
     );
 }
