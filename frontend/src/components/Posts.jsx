@@ -1,10 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Eye, ThumbsDown, ThumbsUp } from 'lucide-react';
+import { AuthContext } from '../utils/AuthContext';
 
 function Posts() {
+    const { user } = useContext(AuthContext);
     const [posts, setPosts] = useState([]);
     const [formData, setFormData] = useState({ title: '', body: '', tags: '', likes: '', dislikes: '', views: '', userId: '', id: '' });
     const [method, setMethod] = useState("POST");
+    const [message, setMessage] = useState('');
+
 
     useEffect(() => {
         getPosts(); 
@@ -33,6 +37,7 @@ function Posts() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setMessage('');
 
         const url = 'http://localhost:3000/api/posts';
         let response;
@@ -52,6 +57,7 @@ function Posts() {
                         userId: formData.userId,
                     }),
                 });
+                setMessage('Posteo agregado')
             } else if (method === 'PUT') {
                 response = await fetch(`${url}/${formData.id}`, {
                     method: 'PUT',
@@ -71,7 +77,6 @@ function Posts() {
 
             if (response.ok) {
                 const data = await response.json();
-                console.log('Respuesta del servidor:', data);
                 if (method === 'POST') {
                     setPosts(prevPosts => [...prevPosts, data.data]);
                 } else if (method === 'PUT') {
@@ -138,66 +143,74 @@ function Posts() {
                 ))}
             </ul>
 
-            <form onSubmit={handleSubmit} className="pt-12">
-                <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    <div className="w-full">
-                        <label htmlFor="id" className="block font-medium text-gray-900">ID del post</label>
-                        <div className="mt-2">
-                            <input type="text" name="id" id="id" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.id} onChange={(e) => setFormData({...formData, id: e.target.value})} />
+            {user ? (
+                <>
+                    <form onSubmit={handleSubmit} className="pt-12">
+                        <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                            <div className="w-full">
+                                <label htmlFor="id" className="block font-medium text-gray-900">ID del post</label>
+                                <div className="mt-2">
+                                    <input type="text" name="id" id="id" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.id} onChange={(e) => setFormData({...formData, id: e.target.value})} />
+                                </div>
+                            </div>
+                            <div className="w-full">
+                                <label htmlFor="title" className="block font-medium text-gray-900">Título</label>
+                                <div className="mt-2">
+                                    <input type="text" name="title" id="title" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.title} onChange={(e) => setFormData({...formData, title: e.target.value})} />
+                                </div>
+                            </div>
+                            <div className="w-full">
+                                <label htmlFor="body" className="block font-medium text-gray-900">Contenido</label>
+                                <div className="mt-2">
+                                    <input type="text" name="body" id="body" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.body} onChange={(e) => setFormData({...formData, body: e.target.value})} />
+                                </div>
+                            </div>
+                            <div className="w-full">
+                                <label htmlFor="tags" className="block font-medium text-gray-900">Etiquetas</label>
+                                <div className="mt-2">
+                                    <input type="text" name="tags" id="tags" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.tags} onChange={(e) => setFormData({...formData, tags: e.target.value})} />
+                                </div>
+                            </div>
+                            <div className="w-full">
+                                <label htmlFor="likes" className="block font-medium text-gray-900">Me gustas</label>
+                                <div className="mt-2">
+                                    <input type="number" name="likes" id="likes" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.likes} onChange={(e) => setFormData({...formData, likes: e.target.value})} />
+                                </div>
+                            </div>
+                            <div className="w-full">
+                                <label htmlFor="dislikes" className="block font-medium text-gray-900">No me gustas</label>
+                                <div className="mt-2">
+                                    <input type="number" name="dislikes" id="dislikes" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.dislikes} onChange={(e) => setFormData({...formData, dislikes: e.target.value})} />
+                                </div>
+                            </div>
+                            <div className="w-full">
+                                <label htmlFor="views" className="block font-medium text-gray-900">Vistas</label>
+                                <div className="mt-2">
+                                    <input type="number" name="views" id="views" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.views} onChange={(e) => setFormData({...formData, views: e.target.value})} />
+                                </div>
+                            </div>
+                            <div className="w-full">
+                                <label htmlFor="userId" className="block font-medium text-gray-900">ID del usuario</label>
+                                <div className="mt-2">
+                                    <input type="text" name="userId" id="userId" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.userId} onChange={(e) => setFormData({...formData, userId: e.target.value})} />
+                                </div>
+                            </div>
+                            <div className="flex items-end gap-4">
+                                <select className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5" onChange={(e) => setMethod(e.target.value)} value={method}>
+                                    <option value="POST">POST</option>
+                                    <option value="PUT">PUT</option>
+                                    <option value="DELETE">DELETE</option>
+                                </select>
+                                <button className="py-2.5 px-6 bg-blue-800 rounded-md text-white flex-1" type="submit">Enviar</button>
+                            </div>
                         </div>
-                    </div>
-                    <div className="w-full">
-                        <label htmlFor="title" className="block font-medium text-gray-900">Título</label>
-                        <div className="mt-2">
-                            <input type="text" name="title" id="title" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.title} onChange={(e) => setFormData({...formData, title: e.target.value})} />
-                        </div>
-                    </div>
-                    <div className="w-full">
-                        <label htmlFor="body" className="block font-medium text-gray-900">Contenido</label>
-                        <div className="mt-2">
-                            <input type="text" name="body" id="body" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.body} onChange={(e) => setFormData({...formData, body: e.target.value})} />
-                        </div>
-                    </div>
-                    <div className="w-full">
-                        <label htmlFor="tags" className="block font-medium text-gray-900">Etiquetas</label>
-                        <div className="mt-2">
-                            <input type="text" name="tags" id="tags" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.tags} onChange={(e) => setFormData({...formData, tags: e.target.value})} />
-                        </div>
-                    </div>
-                    <div className="w-full">
-                        <label htmlFor="likes" className="block font-medium text-gray-900">Me gustas</label>
-                        <div className="mt-2">
-                            <input type="number" name="likes" id="likes" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.likes} onChange={(e) => setFormData({...formData, likes: e.target.value})} />
-                        </div>
-                    </div>
-                    <div className="w-full">
-                        <label htmlFor="dislikes" className="block font-medium text-gray-900">No me gustas</label>
-                        <div className="mt-2">
-                            <input type="number" name="dislikes" id="dislikes" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.dislikes} onChange={(e) => setFormData({...formData, dislikes: e.target.value})} />
-                        </div>
-                    </div>
-                    <div className="w-full">
-                        <label htmlFor="views" className="block font-medium text-gray-900">Vistas</label>
-                        <div className="mt-2">
-                            <input type="number" name="views" id="views" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.views} onChange={(e) => setFormData({...formData, views: e.target.value})} />
-                        </div>
-                    </div>
-                    <div className="w-full">
-                        <label htmlFor="userId" className="block font-medium text-gray-900">ID del usuario</label>
-                        <div className="mt-2">
-                            <input type="text" name="userId" id="userId" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.userId} onChange={(e) => setFormData({...formData, userId: e.target.value})} />
-                        </div>
-                    </div>
-                    <div className="flex items-end gap-4">
-                        <select className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5" onChange={(e) => setMethod(e.target.value)} value={method}>
-                            <option value="POST">POST</option>
-                            <option value="PUT">PUT</option>
-                            <option value="DELETE">DELETE</option>
-                        </select>
-                        <button className="py-2.5 px-6 bg-blue-800 rounded-md text-white flex-1" type="submit">Enviar</button>
-                    </div>
-                </div>
-            </form>
+                    </form>
+                </>
+            ) : (
+                <>
+                    <p className="mt-6">Inicia sesión para usar el crud</p>
+                </>
+            )}
         </>
     );
 }

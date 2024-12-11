@@ -30,7 +30,6 @@ const Login = () => {
 
             const response = await fetch(endPoint, config);
             const data = await response.json();
-            console.log(data);
 
             if (response.ok) {
                 const token = data.data.jwt;

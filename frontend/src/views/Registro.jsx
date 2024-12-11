@@ -18,8 +18,6 @@ const Registro = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            console.log('Enviando formulario');
-            console.log(formData);
             const endPoint = 'http://127.0.0.1:3000/api/users';
             const config = {
                 headers: {
@@ -37,7 +35,6 @@ const Registro = () => {
             }
 
             const data = await response.json();
-            console.log(data);
 
             setFormData({
                 username: '',
@@ -47,7 +44,6 @@ const Registro = () => {
 
             navigate('/login');
         } catch (error) {
-            console.log(error);
             alert('Error del Servidor');
         }
     };

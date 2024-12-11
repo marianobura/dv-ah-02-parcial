@@ -1,9 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { AuthContext } from '../utils/AuthContext';
 
 function Users() {
+    const { user } = useContext(AuthContext);
     let [users, setUsers] = useState([]);
     let [formData, setFormData] = useState({ id: '', username: '', password: '' });
     let [method, setMethod] = useState("POST");
+    const [message, setMessage] = useState('');
 
     const getUsers = async () => {
         try {
@@ -27,6 +30,7 @@ function Users() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setMessage('');
 
         const url = method === "DELETE" || method === "PUT" ? `http://localhost:3000/api/users/${formData.id}` : `http://localhost:3000/api/users`;
 
@@ -36,6 +40,7 @@ function Users() {
                 response = await fetch(url, {
                     method: "DELETE",
                 });
+                setMessage('usuario eliminado');
             } else if (method === "PUT") {
                 response = await fetch(url, {
                     method: "PUT",
@@ -48,6 +53,7 @@ function Users() {
                         password: formData.password,
                     }),
                 });
+                setMessage('usuario editado');
             } else if (method === "POST") {
                 response = await fetch(url, {
                     method: "POST",
@@ -56,6 +62,7 @@ function Users() {
                     },
                     body: JSON.stringify(formData),
                 });
+                setMessage('usuario agregado');
             }
 
             if (response.ok) {
@@ -92,42 +99,55 @@ function Users() {
                 ))}
             </ul>
 
-            <form onSubmit={handleSubmit} className="pt-12">
-                <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    <div className="w-full">
-                        <label htmlFor="username-id" className="block font-medium text-gray-900">ID del usuario</label>
-                        <div className="mt-2">
-                            <input type="text" name="username-id" id="username-id" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.id} onChange={(e) => setFormData({...formData, id: e.target.value})} />
+            {user ? (
+                <>
+                    {message && (
+                        <p className="text-green-600 text-sm font-semibold bg-red-100 w-full rounded-md p-2 border border-green-600">
+                            {message}
+                        </p>
+                    )}
+                    <form onSubmit={handleSubmit} className="pt-12">
+                        <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                            <div className="w-full">
+                                <label htmlFor="username-id" className="block font-medium text-gray-900">ID del usuario</label>
+                                <div className="mt-2">
+                                    <input type="text" name="username-id" id="username-id" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.id} onChange={(e) => setFormData({...formData, id: e.target.value})} />
+                                </div>
+                            </div>
+                            <div className="w-full">
+                                <label htmlFor="email" className="block font-medium text-gray-900">Correo electrónico</label>
+                                <div className="mt-2">
+                                    <input type="email" name="email" id="email" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} />
+                                </div>
+                            </div>
+                            <div className="w-full">
+                                <label htmlFor="username" className="block font-medium text-gray-900">Nombre de usuario</label>
+                                <div className="mt-2">
+                                    <input type="text" name="username" id="username" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.username} onChange={(e) => setFormData({...formData, username: e.target.value})} />
+                                </div>
+                            </div>
+                            <div className="w-full">
+                                <label htmlFor="password" className="block font-medium text-gray-900">Contraseña</label>
+                                <div className="mt-2">
+                                    <input type="password" name="password" id="password" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.password} onChange={(e) => setFormData({...formData, password: e.target.value})} />
+                                </div>
+                            </div>
+                            <div className="flex items-end gap-4">
+                                <select className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5" onChange={(e) => setMethod(e.target.value)} value={method}>
+                                    <option value="POST">POST</option>
+                                    <option value="PUT">PUT</option>
+                                    <option value="DELETE">DELETE</option>
+                                </select>
+                                <button className="py-2.5 px-6 bg-blue-800 rounded-md text-white flex-1" type="submit">Enviar</button>
+                            </div>
                         </div>
-                    </div>
-                    <div className="w-full">
-                        <label htmlFor="email" className="block font-medium text-gray-900">Correo electrónico</label>
-                        <div className="mt-2">
-                            <input type="email" name="email" id="email" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} />
-                        </div>
-                    </div>
-                    <div className="w-full">
-                        <label htmlFor="username" className="block font-medium text-gray-900">Nombre de usuario</label>
-                        <div className="mt-2">
-                            <input type="text" name="username" id="username" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.username} onChange={(e) => setFormData({...formData, username: e.target.value})} />
-                        </div>
-                    </div>
-                    <div className="w-full">
-                        <label htmlFor="password" className="block font-medium text-gray-900">Contraseña</label>
-                        <div className="mt-2">
-                            <input type="password" name="password" id="password" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.password} onChange={(e) => setFormData({...formData, password: e.target.value})} />
-                        </div>
-                    </div>
-                    <div className="flex items-end gap-4">
-                        <select className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5" onChange={(e) => setMethod(e.target.value)} value={method}>
-                            <option value="POST">POST</option>
-                            <option value="PUT">PUT</option>
-                            <option value="DELETE">DELETE</option>
-                        </select>
-                        <button className="py-2.5 px-6 bg-blue-800 rounded-md text-white flex-1" type="submit">Enviar</button>
-                    </div>
-                </div>
-            </form>
+                    </form>
+                </>
+            ) : (
+                <>
+                    <p className="mt-6">Inicia sesión para usar el crud</p>
+                </>
+            )}
         </>
     );
 }
