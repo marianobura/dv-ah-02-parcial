@@ -71,8 +71,10 @@ function Posts() {
                         userId: formData.userId,
                     }),
                 });
+                setMessage('Posteo editado')
             } else if (method === 'DELETE') {
                 response = await fetch(`${url}/${formData.id}`, { method: 'DELETE' });
+                setMessage('Posteo eliminado')
             }
 
             if (response.ok) {
@@ -145,6 +147,20 @@ function Posts() {
 
             {user ? (
                 <>
+                    {message && (
+                        <p className={`text-black text-sm font-semibold bg-gray-200 w-full rounded-md p-2 ${
+                            message.includes('editado')
+                                ? 'border border-blue-600'
+                                : message.includes('eliminado')
+                                ? 'border border-red-600'
+                                : 'border border-green-600'
+                            }`
+                            }
+                        >
+                            {message}
+                        </p>
+                    )}
+
                     <form onSubmit={handleSubmit} className="pt-12">
                         <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                             <div className="w-full">

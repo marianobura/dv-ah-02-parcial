@@ -11,7 +11,7 @@ require('dotenv').config();
 const port = process.env.PORT;
 
 // Conectamos a la db
-mongoose.connect(process.env.URI_BD, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.URI_BD, { })
 const db = mongoose.connection;
 
 db.on('error', () => console.error('Error'));

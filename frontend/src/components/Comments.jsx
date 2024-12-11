@@ -7,6 +7,7 @@ function Comments() {
     let [comments, setComments] = useState([]);
     let [formData, setFormData] = useState({ id: '', body: '', likes: '', userId: '', postId: '' });
     let [method, setMethod] = useState("POST");
+    const [message, setMessage] = useState('');
 
     const getComments = async () => {
         try {
@@ -32,6 +33,7 @@ function Comments() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setMessage('');
         
         const url = method === "DELETE" || method === "PUT" 
             ? `http://localhost:3000/api/comments/${formData.id}`
@@ -43,6 +45,7 @@ function Comments() {
                 response = await fetch(url, {
                     method: "DELETE",
                 });
+                setMessage('Comentario eliminado');
             } else if (method === "PUT") {
                 response = await fetch(url, {
                     method: "PUT",
@@ -55,6 +58,7 @@ function Comments() {
                         postId: formData.postId,
                     }),
                 });
+                setMessage('Comentario editado');
             } else if (method === "POST") {
                 response = await fetch(url, {
                     method: "POST",
@@ -63,6 +67,7 @@ function Comments() {
                     },
                     body: JSON.stringify(formData),
                 });
+                setMessage('Comentario agregado');
             }
     
             if (response.ok) {
@@ -112,6 +117,20 @@ function Comments() {
 
             {user ? (
                 <>
+                {message && (
+                        <p className={`text-black text-sm font-semibold bg-gray-200 w-full rounded-md p-2 ${
+                            message.includes('editado')
+                                ? 'border border-blue-600'
+                                : message.includes('eliminado')
+                                ? 'border border-red-600'
+                                : 'border border-green-600'
+                            }`
+                            }
+                        >
+                            {message}
+                        </p>
+                    )}
+                    
                     <form onSubmit={handleSubmit} className="pt-12">
                         <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                             <div className="w-full">
