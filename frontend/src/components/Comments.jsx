@@ -4,6 +4,7 @@ import { AuthContext } from '../utils/AuthContext';
 
 function Comments() {
     const { user } = useContext(AuthContext);
+    const { token } = useContext(AuthContext);
     let [comments, setComments] = useState([]);
     let [formData, setFormData] = useState({ id: '', body: '', likes: '', userId: '', postId: '' });
     let [method, setMethod] = useState("POST");
@@ -11,7 +12,11 @@ function Comments() {
 
     const getComments = async () => {
         try {
-            const resp = await fetch('http://localhost:3000/api/comments');
+            const resp = await fetch('http://localhost:3000/api/comments', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            });
             const data = await resp.json();
             
             setComments(data.data.map(comment => ({
@@ -44,6 +49,10 @@ function Comments() {
             if (method === "DELETE") {
                 response = await fetch(url, {
                     method: "DELETE",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
                 });
                 setMessage('Comentario eliminado');
             } else if (method === "PUT") {
@@ -51,6 +60,7 @@ function Comments() {
                     method: "PUT",
                     headers: {
                         'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
                     },
                     body: JSON.stringify({
                         body: formData.body,
@@ -64,6 +74,7 @@ function Comments() {
                     method: "POST",
                     headers: {
                         'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
                     },
                     body: JSON.stringify(formData),
                 });
@@ -117,22 +128,16 @@ function Comments() {
 
             {user ? (
                 <>
-                {message && (
-                        <p className={`text-black text-sm font-semibold bg-gray-200 w-full rounded-md p-2 ${
-                            message.includes('editado')
-                                ? 'border border-blue-600'
-                                : message.includes('eliminado')
-                                ? 'border border-red-600'
-                                : 'border border-green-600'
-                            }`
-                            }
-                        >
-                            {message}
-                        </p>
+                    {message && (
+                        <p className={`mt-2 text-sm font-semibold w-fit rounded-md p-2 ${
+                                message.includes('editado') ? 'text-blue-800 bg-blue-200 border border-blue-800'
+                                : message.includes('eliminado') ? 'text-red-800 bg-red-200 border border-red-800'
+                                : 'text-green-800 bg-green-200 border border-green-800'
+                        }`}>{message}</p>
                     )}
                     
-                    <form onSubmit={handleSubmit} className="pt-12">
-                        <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <form onSubmit={handleSubmit} className="mt-12">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                             <div className="w-full">
                                 <label htmlFor="id" className="block font-medium text-gray-900">ID del comentario</label>
                                 <div className="mt-2">

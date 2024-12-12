@@ -3,6 +3,7 @@ import { AuthContext } from '../utils/AuthContext';
 
 function Users() {
     const { user } = useContext(AuthContext);
+    const { token } = useContext(AuthContext);
     let [users, setUsers] = useState([]);
     let [formData, setFormData] = useState({ id: '', username: '', password: '' });
     let [method, setMethod] = useState("POST");
@@ -10,7 +11,11 @@ function Users() {
 
     const getUsers = async () => {
         try {
-            const resp = await fetch('http://localhost:3000/api/users');
+            const resp = await fetch('http://localhost:3000/api/users', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
             const data = await resp.json();
 
             setUsers(data.data.map(user => ({
@@ -39,13 +44,18 @@ function Users() {
             if (method === "DELETE") {
                 response = await fetch(url, {
                     method: "DELETE",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token,
+                    },
                 });
-                setMessage('usuario eliminado');
+                setMessage('Usuario eliminado');
             } else if (method === "PUT") {
                 response = await fetch(url, {
                     method: "PUT",
                     headers: {
                         'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token,
                     },
                     body: JSON.stringify({
                         username: formData.username,
@@ -53,16 +63,17 @@ function Users() {
                         password: formData.password,
                     }),
                 });
-                setMessage('usuario editado');
+                setMessage('Usuario editado');
             } else if (method === "POST") {
                 response = await fetch(url, {
                     method: "POST",
                     headers: {
                         'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token,
                     },
                     body: JSON.stringify(formData),
                 });
-                setMessage('usuario agregado');
+                setMessage('Usuario agregado');
             }
 
             if (response.ok) {
@@ -102,21 +113,15 @@ function Users() {
             {user ? (
                 <>
                     {message && (
-                        <p className={`text-black text-sm font-semibold bg-gray-200 w-full rounded-md p-2 ${
-                            message.includes('editado')
-                                ? 'border border-blue-600'
-                                : message.includes('eliminado')
-                                ? 'border border-red-600'
-                                : 'border border-green-600'
-                            }`
-                            }
-                        >
-                            {message}
-                        </p>
+                        <p className={`mt-2 text-sm font-semibold w-fit rounded-md p-2 ${
+                                message.includes('editado') ? 'text-blue-800 bg-blue-200 border border-blue-800'
+                                : message.includes('eliminado') ? 'text-red-800 bg-red-200 border border-red-800'
+                                : 'text-green-800 bg-green-200 border border-green-800'
+                        }`}>{message}</p>
                     )}
                     
-                    <form onSubmit={handleSubmit} className="pt-12">
-                        <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <form onSubmit={handleSubmit} className="mt-12">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                             <div className="w-full">
                                 <label htmlFor="username-id" className="block font-medium text-gray-900">ID del usuario</label>
                                 <div className="mt-2">

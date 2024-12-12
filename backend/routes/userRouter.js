@@ -1,18 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const { createUser, getUsers, getUsersById, deleteUserById, updateUserById, login } = require('../controllers/userController');
+const auth = require('../middleware/auth');
 
-// Retorna todos los usuarios
-router.get('/', getUsers );
-// Crea un usuario
-router.post('/', createUser );
-// Login
+router.get('/', auth, getUsers );
+router.post('/', auth, createUser );
 router.post('/login', login);
-// Obtener usuario por ID
-router.get('/:id', getUsersById);
-// Eliminamos un user por id
-router.delete('/:id', deleteUserById);
-// Actualizamos el usuarios
-router.put('/:id', updateUserById);
+router.get('/:id', auth, getUsersById);
+router.delete('/:id', auth, deleteUserById);
+router.put('/:id', auth, updateUserById);
 
 module.exports = router;

@@ -4,6 +4,7 @@ import { AuthContext } from '../utils/AuthContext';
 
 function Posts() {
     const { user } = useContext(AuthContext);
+    const { token } = useContext(AuthContext);
     const [posts, setPosts] = useState([]);
     const [formData, setFormData] = useState({ title: '', body: '', tags: '', likes: '', dislikes: '', views: '', userId: '', id: '' });
     const [method, setMethod] = useState("POST");
@@ -16,7 +17,11 @@ function Posts() {
     
     const getPosts = async () => {
         try {
-            const resp = await fetch('http://localhost:3000/api/posts');
+            const resp = await fetch('http://localhost:3000/api/posts', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
             const data = await resp.json();
 
             setPosts(data.data.map(post => ({
@@ -47,7 +52,10 @@ function Posts() {
             if (method === 'POST') {
                 response = await fetch(url, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
                     body: JSON.stringify({
                         title: formData.title,
                         body: formData.body,
@@ -61,7 +69,10 @@ function Posts() {
             } else if (method === 'PUT') {
                 response = await fetch(`${url}/${formData.id}`, {
                     method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
                     body: JSON.stringify({
                         title: formData.title,
                         body: formData.body,
@@ -73,7 +84,13 @@ function Posts() {
                 });
                 setMessage('Posteo editado')
             } else if (method === 'DELETE') {
-                response = await fetch(`${url}/${formData.id}`, { method: 'DELETE' });
+                response = await fetch(`${url}/${formData.id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
                 setMessage('Posteo eliminado')
             }
 
@@ -148,21 +165,15 @@ function Posts() {
             {user ? (
                 <>
                     {message && (
-                        <p className={`text-black text-sm font-semibold bg-gray-200 w-full rounded-md p-2 ${
-                            message.includes('editado')
-                                ? 'border border-blue-600'
-                                : message.includes('eliminado')
-                                ? 'border border-red-600'
-                                : 'border border-green-600'
-                            }`
-                            }
-                        >
-                            {message}
-                        </p>
+                        <p className={`mt-2 text-sm font-semibold w-fit rounded-md p-2 ${
+                                message.includes('editado') ? 'text-blue-800 bg-blue-200 border border-blue-800'
+                                : message.includes('eliminado') ? 'text-red-800 bg-red-200 border border-red-800'
+                                : 'text-green-800 bg-green-200 border border-green-800'
+                        }`}>{message}</p>
                     )}
 
-                    <form onSubmit={handleSubmit} className="pt-12">
-                        <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <form onSubmit={handleSubmit} className="mt-12">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                             <div className="w-full">
                                 <label htmlFor="id" className="block font-medium text-gray-900">ID del post</label>
                                 <div className="mt-2">
