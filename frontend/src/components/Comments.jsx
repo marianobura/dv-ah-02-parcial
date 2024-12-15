@@ -138,36 +138,52 @@ function Comments() {
                     
                     <form onSubmit={handleSubmit} className="mt-12">
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                            <div className="w-full">
-                                <label htmlFor="id" className="block font-medium text-gray-900">ID del comentario</label>
-                                <div className="mt-2">
-                                    <input type="text" name="id" id="id" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.id} onChange={(e) => setFormData({...formData, id: e.target.value})} />
-                                </div>
-                            </div>
-                            <div className="w-full">
-                                <label htmlFor="body" className="block font-medium text-gray-900">Contenido</label>
-                                <div className="mt-2">
-                                    <input type="text" name="body" id="body" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.body} onChange={(e) => setFormData({...formData, body: e.target.value})} />
-                                </div>
-                            </div>
-                            <div className="w-full">
-                                <label htmlFor="likes" className="block font-medium text-gray-900">Me gustas</label>
-                                <div className="mt-2">
-                                    <input type="number" name="likes" id="likes" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.likes} onChange={(e) => setFormData({...formData, likes: e.target.value})} />
-                                </div>
-                            </div>
-                            <div className="w-full">
-                                <label htmlFor="userId" className="block font-medium text-gray-900">ID del usuario</label>
-                                <div className="mt-2">
-                                    <input type="text" name="userId" id="userId" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.userId} onChange={(e) => setFormData({...formData, userId: e.target.value})} />
-                                </div>
-                            </div>
-                            <div className="w-full">
-                                <label htmlFor="postId" className="block font-medium text-gray-900">ID del post</label>
-                                <div className="mt-2">
-                                    <input type="text" name="postId" id="postId" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.postId} onChange={(e) => setFormData({...formData, postId: e.target.value})} />
-                                </div>
-                            </div>
+                            {method === "DELETE" && (
+                                <>
+                                    <div className="w-full">
+                                        <label htmlFor="id" className="block font-medium text-gray-900">ID del comentario</label>
+                                        <div className="mt-2">
+                                            <input type="text" name="id" id="id" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.id} onChange={(e) => setFormData({...formData, id: e.target.value})} />
+                                        </div>
+                                    </div>
+                                </>
+                            )}
+                            {method !== 'DELETE' && (
+                                <>
+                                    {method === 'PUT' && (
+                                        <div className="w-full">
+                                            <label htmlFor="id" className="block font-medium text-gray-900">ID del comentario</label>
+                                            <div className="mt-2">
+                                                <input type="text" name="id" id="id" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.id} onChange={(e) => setFormData({...formData, id: e.target.value})} />
+                                            </div>
+                                        </div>
+                                    )}
+                                    <div className="w-full">
+                                        <label htmlFor="body" className="block font-medium text-gray-900">Contenido</label>
+                                        <div className="mt-2">
+                                            <input type="text" name="body" id="body" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.body} onChange={(e) => setFormData({...formData, body: e.target.value})} />
+                                        </div>
+                                    </div>
+                                    <div className="w-full">
+                                        <label htmlFor="likes" className="block font-medium text-gray-900">Me gustas</label>
+                                        <div className="mt-2">
+                                            <input type="number" name="likes" id="likes" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.likes} onChange={(e) => setFormData({...formData, likes: e.target.value})} />
+                                        </div>
+                                    </div>
+                                    <div className="w-full">
+                                        <label htmlFor="userId" className="block font-medium text-gray-900">ID del usuario</label>
+                                        <div className="mt-2">
+                                            <input type="text" name="userId" id="userId" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.userId} onChange={(e) => setFormData({...formData, userId: e.target.value})} />
+                                        </div>
+                                    </div>
+                                    <div className="w-full">
+                                        <label htmlFor="postId" className="block font-medium text-gray-900">ID del post</label>
+                                        <div className="mt-2">
+                                            <input type="text" name="postId" id="postId" className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6" value={formData.postId} onChange={(e) => setFormData({...formData, postId: e.target.value})} />
+                                        </div>
+                                    </div>
+                                </>
+                            )} 
                             <div className="flex items-end gap-4">
                                 <select className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5" onChange={(e) => setMethod(e.target.value)} value={method}>
                                     <option value="POST">POST</option>
@@ -181,7 +197,7 @@ function Comments() {
                 </>
             ) : (
                 <>
-                    <p className="mt-6">Inicia sesión para usar el crud</p>
+                    <p className="mt-6">Inicia sesión para ver los comentarios</p>
                 </>
             )}
         </>
