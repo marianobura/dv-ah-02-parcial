@@ -4,7 +4,7 @@ const { createUser, getUsers, getUsersById, deleteUserById, updateUserById, logi
 const auth = require('../middleware/auth');
 
 router.get('/', auth, getUsers );
-router.post('/', auth, createUser );
+router.post('/', createUser );
 router.post('/login', login);
 router.get('/:id', auth, getUsersById);
 router.delete('/:id', auth, deleteUserById);
